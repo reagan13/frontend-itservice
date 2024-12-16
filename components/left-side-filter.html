@@ -1,0 +1,107 @@
+<!-- Left Sidebar - Filters -->
+<div class="w-1/4 pr-6">
+	<div class="bg-white rounded-lg shadow-md p-6 h-full">
+		<h2 class="text-2xl font-bold mb-6 text-blue-600">Filters</h2>
+
+		<!-- Search Input -->
+		<div class="mb-4">
+			<label class="block text-gray-700 font-bold mb-2">Search</label>
+			<input
+				type="text"
+				placeholder="Search products..."
+				id="searchInput"
+				class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+			/>
+		</div>
+
+		<!-- Categories Filter -->
+		<div class="mb-4">
+			<label class="block text-gray-700 font-bold mb-2">Categories</label>
+			<div class="space-y-2">
+				<div class="flex items-center">
+					<input type="checkbox" id="laptops" class="mr-2" value="Laptops" />
+					<label for="laptops">Laptops</label>
+				</div>
+				<div class="flex items-center">
+					<input
+						type="checkbox"
+						id="smartphones"
+						class="mr-2"
+						value="Smartphones"
+					/>
+					<label for="smartphones">Smartphones</label>
+				</div>
+				<div class="flex items-center">
+					<input
+						type="checkbox"
+						id="accessories"
+						class="mr-2"
+						value="Accessories"
+					/>
+					<label for="accessories">Accessories</label>
+				</div>
+			</div>
+		</div>
+
+		<!-- Price Range Filter -->
+		<div class="mb-4">
+			<label class="block text-gray-700 font-bold mb-2">Price Range</label>
+			<div class="flex space-x-2 mb-2">
+				<input
+					type="number"
+					id="minPrice"
+					placeholder="Min"
+					class="w-1/2 border rounded px-3 py-2"
+				/>
+				<input
+					type="number"
+					id="maxPrice"
+					placeholder="Max"
+					class="w-1/2 border rounded px-3 py-2"
+				/>
+			</div>
+			<div class="space-y-2">
+				<div class="flex items-center">
+					<input
+						type="radio"
+						name="priceRange"
+						id="under100"
+						class="mr-2"
+						value="0-100"
+					/>
+					<label for="under100">Under $100</label>
+				</div>
+				<div class="flex items-center">
+					<input
+						type="radio"
+						name="priceRange"
+						id="100to500"
+						class="mr-2"
+						value="100-500"
+					/>
+					<label for="100to500">$100 - $500</label>
+				</div>
+				<div class="flex items-center">
+					<input
+						type="radio"
+						name="priceRange"
+						id="500to1000"
+						class="mr-2"
+						value="500-1000"
+					/>
+					<label for="500to1000">$500 - $1000</label>
+				</div>
+				<div class="flex items-center">
+					<input
+						type="radio"
+						name="priceRange"
+						id="over1000"
+						class="mr-2"
+						value="1000+"
+					/>
+					<label for="over1000">Over $1000</label>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

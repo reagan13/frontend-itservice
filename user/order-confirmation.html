@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Order Confirmation</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+			rel="stylesheet"
+		/>
+	</head>
+	<body class="bg-gray-50">
+		<div id="navigationBar"></div>
+		<div class="mx-auto px-4 py-8">
+			<div
+				class="bg-white p-4 sm:p-8 rounded-xl shadow-lg max-w-md mx-auto text-center"
+			>
+				<svg
+					class="mx-auto mb-4 text-green-500 w-12 h-12 sm:w-16 sm:h-16"
+					fill="currentColor"
+					viewBox="0 0 20 20"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+
+				<div id="orderConfirmationContent">
+					<h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 sm:mb-4">
+						Order Confirmed!
+					</h1>
+					<p class="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
+						Thank you for your purchase.
+					</p>
+
+					<div
+						id="orderDetails"
+						class="text-left bg-gray-100 p-3 sm:p-4 rounded-lg"
+					>
+						<h2 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">
+							Order Summary
+						</h2>
+						<div id="orderItemsContainer" class="space-y-2 sm:space-y-3"></div>
+						<p
+							id="totalAmountDisplay"
+							class="text-right font-bold mt-2 sm:mt-4 text-sm sm:text-base"
+						></p>
+					</div>
+				</div>
+
+				<div
+					class="mt-4 sm:mt-6 flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4"
+				>
+					<a
+						href="products.html"
+						class="bg-blue-500 text-white px-4 py-2 sm:px-6 sm:py-2 rounded-full hover:bg-blue-600 text-sm sm:text-base"
+					>
+						Continue Shopping
+					</a>
+					<a
+						href="./order.html"
+						class="bg-gray-200 text-gray-800 px-4 py-2 sm:px-6 sm:py-2 rounded-full hover:bg-gray-300 text-sm sm:text-base"
+					>
+						View Orders
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", async () => {
+				const urlParams = new URLSearchParams(window.location.search);
+				const orderId = urlParams.get("orderId");
+				const userId = localStorage.getItem("userId");
+
+				if (!orderId) {
+					showErrorMessage("No order ID provided");
+					return;
+				}
+
+				if (!userId) {
+					showErrorMessage("Please log in to view order details");
+					return;
+				}
+
+				try {
+					const numericOrderId = orderId.replace("ORD-", "");
+
+					const response = await fetch(
+						`http://localhost:3000/api/orders/${numericOrderId}?userId=${userId}`,
+						{
+							method: "GET",
+							headers: {
+								"Content-Type": "application/json",
+							},
+						}
+					);
+
+					const orderData = await response.json();
+
+					if (!response.ok) {
+						throw new Error(orderData.error || "Failed to fetch order details");
+					}
+
+					const itemsContainer = document.getElementById("orderItemsContainer");
+					itemsContainer.innerHTML = "";
+
+					orderData.items.forEach((item) => {
+						const itemElement = document.createElement("div");
+						const FALLBACK_IMAGE = "/PICTURES/no-image.jpg";
+						const imageUrl = item.image || FALLBACK_IMAGE;
+						itemElement.classList.add(
+							"flex",
+							"justify-between",
+							"items-center",
+							"mb-2"
+						);
+						itemElement.innerHTML = `
+                        <div class="flex items-center space-x-2 sm:space-x-4">
+                            <img 
+                                src="${imageUrl}" 
+                                alt="${item.name}" 
+                                class="w-10 h-10  md:w-14 sm:h-14 object-cover rounded-md"
+								onerror="
+                                console.error('Image failed to load:', this.src); 
+                                this.onerror=null; 
+                                this.src='${FALLBACK_IMAGE}'
+                            "
+                            >
+                            <span class="text-sm sm:text-base">${
+															item.name
+														}</span>
+                        </div>
+                        <span class="text-sm sm:text-base">
+                            $${parseFloat(item.price).toFixed(2)} x ${
+							item.quantity
+						}
+                        </span>
+                    `;
+						itemsContainer.appendChild(itemElement);
+					});
+
+					const totalAmountDisplay =
+						document.getElementById("totalAmountDisplay");
+					totalAmountDisplay.textContent = `Total: $${parseFloat(
+						orderData.total
+					).toFixed(2)}`;
+
+					const orderDateElement = document.createElement("p");
+					orderDateElement.classList.add(
+						"text-gray-600",
+						"text-xs",
+						"sm:text-sm",
+						"mt-2"
+					);
+					orderDateElement.textContent = `Order Date: ${orderData.date}`;
+					itemsContainer.appendChild(orderDateElement);
+				} catch (error) {
+					console.error("Error fetching order details:", error);
+					showErrorMessage(error.message);
+				}
+			});
+
+			function showErrorMessage(message) {
+				const orderConfirmationContent = document.getElementById(
+					"orderConfirmationContent"
+				);
+				orderConfirmationContent.innerHTML = `
+                <div class="text-red-500 text-center">
+                    <h2 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">
+                        Oops! Something went wrong
+                    </h2>
+                    <p class="text-base sm:text-lg">${message}</p>
+                    <p class="text-xs sm:text-sm mt-2">
+                        Please try again or contact support.
+                    </p>
+                </div>
+            `;
+			}
+		</script>
+		<script>
+			// Dynamically load HTML components and their respective scripts
+			async function loadComponents() {
+				const components = [
+					{ id: "navigationBar", path: "/components/nav.html" },
+				];
+
+				try {
+					for (const component of components) {
+						const response = await fetch(component.path);
+						const html = await response.text();
+						document.getElementById(component.id).innerHTML = html;
+
+						// Execute inline scripts of the loaded component
+						executeInlineScripts(document.getElementById(component.id));
+					}
+				} catch (error) {
+					console.error("Error loading components:", error);
+				}
+			}
+
+			// Helper: Execute inline <script> tags of a loaded component
+			function executeInlineScripts(element) {
+				const scripts = element.querySelectorAll("script");
+				scripts.forEach((script) => {
+					const newScript = document.createElement("script");
+					newScript.textContent = script.textContent; // Re-execute inline JS
+					document.body.appendChild(newScript).remove(); // Clean up after execution
+				});
+			}
+
+			// Load components when the page is ready
+			document.addEventListener("DOMContentLoaded", loadComponents);
+		</script>
+		<script src="/script.js"></script>
+	</body>
+</html>

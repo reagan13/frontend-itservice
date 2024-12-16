@@ -1,0 +1,182 @@
+<nav class="sticky w-full top-0 fixed z-50 shadow-sm border bg-[#201e43]">
+	<div class="px-5 sm:mx-auto lg:px-10 py-4 flex justify-between items-center">
+		<div class="flex items-center space-x-4">
+			<img
+				src="/PICTURES/Logo.png"
+				alt="TechSphere Logo"
+				class="rounded-full size-12"
+			/>
+			<a href=" " class="text-2xl font-bold text-white">TechSphere</a>
+		</div>
+
+		<!-- Desktop Navigation -->
+		<div class="hidden md:flex items-center space-x-6 text-lg">
+			<a href="./home.html" class="text-xl text-white hover:text-blue-300"
+				>Home</a
+			>
+			<a href="./services.html" class="text-white hover:text-blue-300"
+				>Services</a
+			>
+			<a href="./products.html" class="text-white hover:text-blue-300"
+				>Products</a
+			>
+
+			<div class="relative">
+				<button id="profileToggle" class="text-white hover:text-blue-300">
+					<i class="fas fa-user text-xl"></i>
+				</button>
+				<div
+					id="profileDropdown"
+					class="hidden absolute right-0 mt-2 w-48 bg-[#201e43] text-white border border-gray-700 rounded-lg shadow-lg"
+				>
+					<div class="py-1">
+						<a href="cart.html" class="block px-4 py-2 hover:bg-blue-900">
+							<i class="fas fa-shopping-cart mr-2"></i>Cart
+						</a>
+						<a href="order.html" class="block px-4 py-2 hover:bg-blue-900">
+							<i class="fas fa-list mr-2"></i>Orders
+						</a>
+						<!-- <a href="#" class="block px-4 py-2 hover:bg-blue-900">
+							<i class="fas fa-cog mr-2"></i>Settings
+						</a> -->
+						<a
+							href="#"
+							id="logoutBtn"
+							class="block px-4 py-2 hover:bg-blue-900"
+						>
+							<i class="fas fa-sign-out-alt mr-2"></i>Logout
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Mobile Menu Toggle -->
+		<button id="mobileMenuToggle" class="md:hidden text-2xl text-white">
+			<i class="fas fa-bars"></i>
+		</button>
+	</div>
+</nav>
+
+<!-- Mobile Menu -->
+<div
+	id="mobileMenu"
+	class="fixed top-0 left-0 w-full h-full bg-[#201e43] z-[60] transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto"
+>
+	<div class="p-4">
+		<div class="flex justify-between items-center mb-6">
+			<div class="flex items-center space-x-4">
+				<img
+					src="/PICTURES/Logo.png"
+					alt="TechSphere Logo"
+					class="rounded-full size-12"
+				/>
+				<h1 class="text-2xl font-bold text-white">TechSphere</h1>
+			</div>
+			<button id="closeMobileMenu" class="text-white text-2xl">
+				<i class="fas fa-times"></i>
+			</button>
+		</div>
+
+		<div class="flex flex-col space-y-4">
+			<a href="#" class="text-white text-xl py-2 border-b border-gray-700"
+				>Home</a
+			>
+			<a
+				href="./services.html"
+				class="text-white text-xl py-2 border-b border-gray-700"
+				>Services</a
+			>
+			<a
+				href="./products.html"
+				class="text-white text-xl py-2 border-b border-gray-700"
+				>Products</a
+			>
+			<a
+				href="services.html"
+				class="text-white text-xl py-2 border-b border-gray-700"
+				>About Us</a
+			>
+
+			<div class="flex flex-col space-y-2">
+				<a
+					href="cart.html"
+					class="text-white text-xl py-2 border-b border-gray-700"
+				>
+					<i class="fas fa-shopping-cart mr-2"></i>Cart
+				</a>
+				<a
+					href="order.html"
+					class="text-white text-xl py-2 border-b border-gray-700"
+				>
+					<i class="fas fa-list mr-2"></i>Orders
+				</a>
+				<a href="#" class="text-white text-xl py-2 border-b border-gray-700">
+					<i class="fas fa-cog mr-2"></i>Settings
+				</a>
+				<a href="#" id="mobilLogoutBtn" class="text-white text-xl py-2">
+					<i class="fas fa-sign-out-alt mr-2"></i>Logout
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	document
+		.getElementById("profileToggle")
+		.addEventListener("click", function () {
+			const dropdown = document.getElementById("profileDropdown");
+			dropdown.classList.toggle("hidden");
+		});
+
+	// Close dropdown when clicking outside
+	window.addEventListener("click", function (event) {
+		const dropdown = document.getElementById("profileDropdown");
+		if (!event.target.closest("#profileToggle")) {
+			dropdown.classList.add("hidden");
+		}
+	});
+
+	// Mobile Menu Toggle
+	document
+		.getElementById("mobileMenuToggle")
+		.addEventListener("click", function () {
+			const mobileMenu = document.getElementById("mobileMenu");
+			mobileMenu.classList.remove("-translate-x-full");
+		});
+
+	// Close Mobile Menu
+	document
+		.getElementById("closeMobileMenu")
+		.addEventListener("click", function () {
+			const mobileMenu = document.getElementById("mobileMenu");
+			mobileMenu.classList.add("-translate-x-full");
+		});
+
+	// Close Mobile Menu when menu items clicked
+	document.querySelectorAll("#mobileMenu a").forEach((item) => {
+		item.addEventListener("click", function () {
+			const mobileMenu = document.getElementById("mobileMenu");
+			mobileMenu.classList.add("-translate-x-full");
+		});
+	});
+
+	// Logout Functionality
+	function handleLogout() {
+		// Clear user authentication
+		localStorage.removeItem("userId");
+		localStorage.removeItem("userToken");
+
+		// Redirect to login page
+		window.location.href = "login.html";
+	}
+
+	// Desktop Logout
+	document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+
+	// Mobile Logout
+	document
+		.getElementById("mobilLogoutBtn")
+		.addEventListener("click", handleLogout);
+</script>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>TechSphere - Services</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+			rel="stylesheet"
+		/>
+	</head>
+	<body class="bg-white text-gray-900 font-sans">
+		<!-- Components -->
+		<div id="navigationBar"></div>
+
+		<!-- Services Hero Section -->
+		<header class="pt-24 container mx-auto px-6 mb-16">
+			<div class="text-center">
+				<h1 class="text-5xl font-bold text-blue-600 mb-6">
+					Our Comprehensive IT Services
+				</h1>
+				<p class="text-xl text-gray-600 max-w-3xl mx-auto">
+					We provide cutting-edge IT solutions tailored to meet the unique needs
+					of businesses and individuals, ensuring optimal performance and
+					security.
+				</p>
+			</div>
+		</header>
+
+		<!-- Service Categories -->
+		<section class="container mx-auto px-6 mb-16">
+			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+				<!-- Service Card Template -->
+				<div
+					class="bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm hover:shadow-md transition-all group"
+				>
+					<div
+						class="bg-blue-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6"
+					>
+						<i class="fas fa-desktop text-5xl text-blue-600"></i>
+					</div>
+					<h3 class="text-2xl font-bold text-gray-800 mb-4">Computer Repair</h3>
+					<p class="text-gray-600 mb-6">
+						Comprehensive diagnostic and repair services for all types of
+						computer systems.
+					</p>
+					<ul class="text-left text-gray-700 space-y-2 mb-6">
+						<li class="flex items-center">
+							<i class="fas fa-check text-blue-600 mr-2"></i>Hardware
+							Diagnostics
+						</li>
+						<li class="flex items-center">
+							<i class="fas fa-check text-blue-600 mr-2"></i>Software
+							Troubleshooting
+						</li>
+						<li class="flex items-center">
+							<i class="fas fa-check text-blue-600 mr-2"></i>Data Recovery
+						</li>
+					</ul>
+					<!-- In Computer Repair Card -->
+					<button
+						class="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition-colors service-buttons"
+					>
+						Learn More
+					</button>
+				</div>
+
+				<!-- Network Services -->
+				<div
+					class="bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm hover:shadow-md transition-all group"
+				>
+					<div
+						class="bg-blue-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6"
+					>
+						<i class="fas fa-network-wired text-5xl text-blue-600"></i>
+					</div>
+					<h3 class="text-2xl font-bold text-gray-800 mb-4">
+						Network Solutions
+					</h3>
+					<p class="text-gray-600 mb-6">
+						Professional network design, implementation, and management
+						services.
+					</p>
+					<ul class="text-left text-gray-700 space-y-2 mb-6">
+						<li class="flex items-center">
+							<i class="fas fa-check text-blue-600 mr-2"></i>Network Design
+						</li>
+						<li class="flex items-center">
+							<i class="fas fa-check text-blue-600 mr-2"></i>Infrastructure
+							Setup
+						</li>
+						<li class="flex items-center">
+							<i class="fas fa-check text-blue-600 mr-2"></i>Performance
+							Optimization
+						</li>
+					</ul>
+					<!-- In Network Solutions Card -->
+					<button
+						class="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition-colors service-buttons"
+					>
+						Learn More
+					</button>
+				</div>
+
+				<!-- Cybersecurity Services -->
+				<div
+					class="bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm hover:shadow-md transition-all group"
+				>
+					<div
+						class="bg-blue-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6"
+					>
+						<i class="fas fa-shield-alt text-5xl text-blue-600"></i>
+					</div>
+					<h3 class="text-2xl font-bold text-gray-800 mb-4">Cybersecurity</h3>
+					<p class="text-gray-600 mb-6">
+						Protecting your systems and data from cyber threats with advanced
+						security measures.
+					</p>
+					<ul class="text-left text-gray-700 space-y-2 mb-6">
+						<li class="flex items-center">
+							<i class="fas fa-check text-blue-600 mr-2"></i>Threat Assessment
+						</li>
+						<li class="flex items-center">
+							<i class="fas fa-check text-blue-600 mr-2"></i>Vulnerability
+							Testing
+						</li>
+						<li class="flex items-center">
+							<i class="fas fa-check text-blue-600 mr-2"></i>Incident Response
+						</li>
+					</ul>
+					<!-- In Cybersecurity Card -->
+					<button
+						class="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition-colors service-buttons"
+					>
+						Learn More
+					</button>
+				</div>
+			</div>
+		</section>
+
+		<!-- Testimonials Section -->
+		<section class="container mx-auto px-6 mb-16">
+			<h2 class="text-4xl font-bold text-blue-600 text-center mb-8">
+				What Our Clients Say
+			</h2>
+			<div class="flex flex-col space-y-8">
+				<div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+					<p class="text-gray-600 italic">
+						"TechSphere transformed our IT infrastructure. Their support is
+						unmatched!"
+					</p>
+					<p class="text-right font-bold text-gray-800">- Alex Johnson</p>
+				</div>
+				<div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+					<p class="text-gray-600 italic">
+						"The cybersecurity services provided by TechSphere gave us peace of
+						mind."
+					</p>
+					<p class="text-right font-bold text-gray-800">- Sarah Lee</p>
+				</div>
+				<div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+					<p class="text-gray-600 italic">
+						"Their computer repair service was quick and efficient. Highly
+						recommend!"
+					</p>
+					<p class="text-right font-bold text-gray-800">- Michael Smith</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Contact Section -->
+		<section class="container mx-auto px-6 mb-16">
+			<h2 class="text-4xl font-bold text-blue-600 text-center mb-8">
+				Get in Touch
+			</h2>
+			<p class="text-center text-gray-600 mb-6">
+				Ready to elevate your IT experience? Contact us today!
+			</p>
+			<div class="flex justify-center">
+				<button
+					class="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition-colors"
+				>
+					Contact Us
+				</button>
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer class="bg-gray-800 text-white py-6">
+			<div class="container mx-auto text-center">
+				<p>&copy; 2023 TechSphere. All rights reserved.</p>
+			</div>
+		</footer>
+		<!-- Add this modal structure just before the closing </body> tag -->
+		<div
+			id="serviceModal"
+			class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4"
+		>
+			<div
+				class="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-8 relative"
+			>
+				<button
+					id="closeModal"
+					class="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+				>
+					<i class="fas fa-times text-2xl"></i>
+				</button>
+
+				<div id="modalContent">
+					<!-- Dynamic content will be inserted here -->
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// Service Details Data
+			const serviceDetails = {
+				computerRepair: {
+					title: "Computer Repair Services",
+					description:
+						"Comprehensive diagnostic and repair solutions for all types of computer systems.",
+					services: [
+						{
+							name: "Hardware Diagnostics",
+							description: "Detailed analysis of computer hardware components",
+							rate: "$75 per hour",
+						},
+						{
+							name: "Virus Removal",
+							description: "Complete malware and virus elimination",
+							rate: "$99 flat rate",
+						},
+						{
+							name: "Data Recovery",
+							description:
+								"Recover lost or corrupted data from various storage devices",
+							rate: "$150 - $500 depending on complexity",
+						},
+						{
+							name: "System Optimization",
+							description: "Speed up and improve overall system performance",
+							rate: "$125 per service",
+						},
+					],
+				},
+				networkSolutions: {
+					title: "Network Solutions",
+					description:
+						"Professional network design, implementation, and management services.",
+					services: [
+						{
+							name: "Network Design",
+							description: "Custom network infrastructure planning",
+							rate: "$250 per consultation",
+						},
+						{
+							name: "Network Setup",
+							description: "Complete network installation and configuration",
+							rate: "$500 - $2000 based on complexity",
+						},
+						{
+							name: "Network Security",
+							description: "Comprehensive network security assessment",
+							rate: "$300 per assessment",
+						},
+						{
+							name: "Wireless Network Configuration",
+							description: "Setup and optimization of wireless networks",
+							rate: "$200 per location",
+						},
+					],
+				},
+				cybersecurity: {
+					title: "Cybersecurity Services",
+					description:
+						"Advanced protection against cyber threats and vulnerabilities.",
+					services: [
+						{
+							name: "Threat Assessment",
+							description: "Comprehensive security vulnerability analysis",
+							rate: "$500 per assessment",
+						},
+						{
+							name: "Penetration Testing",
+							description:
+								"Simulated cyber attack to identify system weaknesses",
+							rate: "$1500 - $5000",
+						},
+						{
+							name: "Security Consultation",
+							description: "Personalized cybersecurity strategy development",
+							rate: "$250 per hour",
+						},
+						{
+							name: "Incident Response",
+							description: "Immediate support during active security breaches",
+							rate: "$300 per hour",
+						},
+					],
+				},
+			};
+
+			// Modal functionality
+			const serviceModal = document.getElementById("serviceModal");
+			const modalContent = document.getElementById("modalContent");
+			const closeModalBtn = document.getElementById("closeModal");
+
+			// Function to generate modal content
+			function openServiceModal(serviceKey) {
+				const service = serviceDetails[serviceKey];
+
+				let servicesHTML = service.services
+					.map(
+						(serv) => `
+            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                <div class="flex justify-between items-center">
+                    <h4 class="text-xl font-semibold text-blue-700">${serv.name}</h4>
+                    <span class="text-blue-600 font-bold">${serv.rate}</span>
+                </div>
+                <p class="text-gray-600 mt-2">${serv.description}</p>
+            </div>
+        `
+					)
+					.join("");
+
+				modalContent.innerHTML = `
+            <h2 class="text-3xl font-bold text-blue-600 mb-4">${service.title}</h2>
+            <p class="text-gray-600 mb-6">${service.description}</p>
+            <div class="grid md:grid-cols-2 gap-4">
+                ${servicesHTML}
+            </div>
+        `;
+
+				serviceModal.classList.remove("hidden");
+				serviceModal.classList.add("flex");
+			}
+
+			// Close modal functionality
+			closeModalBtn.addEventListener("click", () => {
+				serviceModal.classList.add("hidden");
+				serviceModal.classList.remove("flex");
+			});
+
+			// Close modal when clicking outside
+			serviceModal.addEventListener("click", (e) => {
+				if (e.target === serviceModal) {
+					serviceModal.classList.add("hidden");
+					serviceModal.classList.remove("flex");
+				}
+			});
+
+			// Modify the existing service buttons to trigger modal
+			document.querySelectorAll(".service-buttons").forEach((button, index) => {
+				button.addEventListener("click", () => {
+					const serviceKeys = [
+						"computerRepair",
+						"networkSolutions",
+						"cybersecurity",
+					];
+					openServiceModal(serviceKeys[index]);
+				});
+			});
+
+			// new
+			// Dynamically load HTML components and their respective scripts
+			async function loadComponents() {
+				const components = [
+					{ id: "navigationBar", path: "/components/nav.html" },
+				];
+
+				try {
+					for (const component of components) {
+						const response = await fetch(component.path);
+						const html = await response.text();
+						document.getElementById(component.id).innerHTML = html;
+
+						// Execute inline scripts of the loaded component
+						executeInlineScripts(document.getElementById(component.id));
+					}
+				} catch (error) {
+					console.error("Error loading components:", error);
+				}
+			}
+
+			// Helper: Execute inline <script> tags of a loaded component
+			function executeInlineScripts(element) {
+				const scripts = element.querySelectorAll("script");
+				scripts.forEach((script) => {
+					const newScript = document.createElement("script");
+					newScript.textContent = script.textContent; // Re-execute inline JS
+					document.body.appendChild(newScript).remove(); // Clean up after execution
+				});
+			}
+
+			// Load components when the page is ready
+			document.addEventListener("DOMContentLoaded", loadComponents);
+		</script>
+		<script src="/script.js"></script>
+	</body>
+</html>

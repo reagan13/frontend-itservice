@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sign In</title>
+		<link rel="stylesheet" href="../design2.css" />
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+			rel="stylesheet"
+		/>
+	</head>
+	<body class="content-wrapper">
+		<!-- Navigation -->
+		<nav class="sticky w-full top-0 fixed z-50 shadow-sm border bg-[#201e43]">
+			<div
+				class="px-5 sm:mx-auto lg:px-10 py-4 flex items-center justify-between"
+			>
+				<!-- Logo Section (Left) -->
+				<div class="flex items-center space-x-4 shrink-0">
+					<img
+						src="/PICTURES/Logo.png"
+						alt="IT Services Logo"
+						class="rounded-full w-12 h-12"
+					/>
+					<a href="/index.html" class="text-2xl font-bold text-white"
+						>IT Services</a
+					>
+				</div>
+
+				<!-- Desktop Navigation (Center) -->
+				<div
+					class="hidden md:flex flex-grow justify-center items-center space-x-6 text-lg"
+				>
+					<a href="/index.html" class="text-xl text-white hover:text-blue-300"
+						>Home</a
+					>
+					<a href="/about-us.html" class="text-white hover:text-blue-300"
+						>About Us</a
+					>
+					<a href="/services.html" class="text-white hover:text-blue-300"
+						>Services</a
+					>
+					<a href="/contact-us.html" class="text-white hover:text-blue-300"
+						>Contact Us</a
+					>
+				</div>
+
+				<!-- Action Buttons (Right) -->
+				<div class="hidden md:flex justify-end items-center space-x-4 shrink-0">
+					<a
+						href="/auth/sign-in.html"
+						class="px-4 py-2 bg-white text-[#201e43] rounded-md hover:bg-blue-600 transition duration-300"
+					>
+						Start Now
+					</a>
+				</div>
+
+				<!-- Mobile Menu Toggle -->
+				<div class="md:hidden flex justify-end">
+					<button id="mobileMenuToggle" class="text-2xl text-white">
+						<i class="fas fa-bars"></i>
+					</button>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Mobile Menu -->
+		<div
+			id="mobileMenu"
+			class="fixed top-0 left-0 w-full h-full bg-[#201e43] z-[60] transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto"
+		>
+			<div class="p-4">
+				<div class="flex justify-between items-center mb-6">
+					<div class="flex items-center space-x-4">
+						<img
+							src="/PICTURES/Logo.png"
+							alt="IT Services Logo"
+							class="rounded-full size-12"
+						/>
+						<h1 class="text-2xl font-bold text-white">IT Services</h1>
+					</div>
+					<button id="closeMobileMenu" class="text-white text-2xl">
+						<i class="fas fa-times"></i>
+					</button>
+				</div>
+
+				<div class="flex flex-col space-y-4">
+					<a
+						href="/index.html"
+						class="text-white text-xl py-2 border-b border-gray-700"
+						>Home</a
+					>
+					<a
+						href="/about-us.html"
+						class="text-white text-xl py-2 border-b border-gray-700"
+						>About Us</a
+					>
+					<a
+						href="/services.html"
+						class="text-white text-xl py-2 border-b border-gray-700"
+						>Services</a
+					>
+					<a
+						href="/contact-us.html"
+						class="text-white text-xl py-2 border-b border-gray-700"
+						>Contact Us</a
+					>
+					<a
+						href="/auth/sign-in.html"
+						class="text-white text-xl py-2 border-b border-gray-700"
+						>Login</a
+					>
+					<a
+						href="/auth/sign-in.html"
+						class="text-white text-xl py-2 bg-blue-500 text-center rounded-md"
+					>
+						Start Now
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div
+			class="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-8"
+		>
+			<div class="w-full max-w-md">
+				<form
+					class="bg-white shadow-md rounded-2xl px-8 pt-6 pb-8 mb-4 space-y-6"
+					method="post"
+					action="#"
+					autocomplete="on"
+				>
+					<div class="text-center">
+						<h2 class="text-3xl font-bold text-[royalblue] mb-2 relative pl-8">
+							<span
+								class="absolute left-0 top-1 w-6 h-6 bg-[royalblue] rounded-full animate-pulse"
+							></span>
+							Sign in to your account
+						</h2>
+						<p class="text-gray-500 text-sm mb-6">
+							Sign in now and get full access to our app.
+						</p>
+					</div>
+
+					<div class="space-y-4">
+						<label class="block relative">
+							<input
+								required
+								type="email"
+								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[royalblue] peer"
+								name="email"
+								autocomplete="email"
+							/>
+							<span
+								class="absolute left-3 top-3 text-gray-400 text-sm peer-placeholder-shown:top-3 peer-focus:top-[-10px] peer-focus:text-xs peer-focus:font-semibold peer-valid:top-[-10px] peer-valid:text-xs peer-valid:font-semibold peer-valid:text-green-500 transition-all duration-300"
+							>
+								Email
+							</span>
+						</label>
+
+						<label class="block relative">
+							<input
+								required
+								type="password"
+								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[royalblue] peer"
+								name="password"
+								autocomplete="current-password"
+							/>
+							<span
+								class="absolute left-3 top-3 text-gray-400 text-sm peer-placeholder-shown:top-3 peer-focus:top-[-10px] peer-focus:text-xs peer-focus:font-semibold peer-valid:top-[-10px] peer-valid:text-xs peer-valid:font-semibold peer-valid:text-green-500 transition-all duration-300"
+							>
+								Password
+							</span>
+						</label>
+					</div>
+
+					<button
+						type="submit"
+						class="w-full bg-[royalblue] text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300"
+					>
+						Sign In
+					</button>
+
+					<div class="text-center space-y-2">
+						<p class="text-sm text-gray-600">
+							No account?
+							<a href="sign-up.html" class="text-[royalblue] hover:underline">
+								Sign Up
+							</a>
+						</p>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="signupbottom-details">
+			<div class="signupbottom_text">
+				<span class="signupcopyright_text">
+					&#169; <a href="#">IT Services.</a> All rights reserved 2024
+				</span>
+				<span class="signuppolicy_terms">
+					<a href="#">Terms & Conditions</a>
+				</span>
+			</div>
+		</div>
+
+		<script src="./login.js"></script>
+		<!-- JavaScript for Mobile Menu Toggle -->
+		<script>
+			// Mobile Menu Toggle
+			document
+				.getElementById("mobileMenuToggle")
+				.addEventListener("click", function () {
+					const mobileMenu = document.getElementById("mobileMenu");
+					mobileMenu.classList.remove("-translate-x-full");
+				});
+
+			// Close Mobile Menu
+			document
+				.getElementById("closeMobileMenu")
+				.addEventListener("click", function () {
+					const mobileMenu = document.getElementById("mobileMenu");
+					mobileMenu.classList.add("-translate-x-full");
+				});
+
+			// Close Mobile Menu when menu items clicked
+			document.querySelectorAll("#mobileMenu a").forEach((item) => {
+				item.addEventListener("click", function () {
+					const mobileMenu = document.getElementById("mobileMenu");
+					mobileMenu.classList.add("-translate-x-full");
+				});
+			});
+		</script>
+		<script src="/script.js"></script>
+	</body>
+</html>

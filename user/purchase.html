@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Purchase Product</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+			rel="stylesheet"
+		/>
+	</head>
+	<body class="bg-gray-100">
+		<!-- Header -->
+		<header class="bg-white shadow">
+			<div
+				class="container mx-auto px-4 py-4 flex justify-between items-center"
+			>
+				<h1 class="text-2xl font-bold">Purchase Product</h1>
+				<nav>
+					<ul class="flex space-x-4">
+						<li>
+							<a href="#" class="text-gray-600 hover:text-blue-500">Home</a>
+						</li>
+						<li>
+							<a href="#" class="text-gray-600 hover:text-blue-500">Products</a>
+						</li>
+						<li>
+							<a href="#" class="text-gray-600 hover:text-blue-500">Services</a>
+						</li>
+						<li>
+							<a href="#" class="text-gray-600 hover:text-blue-500">Contact</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</header>
+
+		<!-- Product Details -->
+		<main class="container mx-auto px-4 py-8">
+			<div class="bg-white rounded-lg shadow-md p-6">
+				<div class="flex">
+					<img
+						src="https://via.placeholder.com/300"
+						alt="Product Image"
+						class="w-1/2 h-auto object-cover rounded"
+					/>
+					<div class="ml-6 w-1/2">
+						<h2 class="text-2xl font-bold">Product Name</h2>
+						<p class="text-gray-600 mt-2">
+							Description of the product goes here. It should provide details
+							about the features and benefits of the product.
+						</p>
+						<p class="text-xl font-semibold mt-4" id="product-price">$49.99</p>
+						<div class="mt-4">
+							<label for="quantity" class="block text-gray-700"
+								>Quantity:</label
+							>
+							<input
+								type="number"
+								id="quantity"
+								value="1"
+								min="1"
+								class="w-16 border rounded mt-1 text-center"
+								onchange="updateTotal()"
+							/>
+						</div>
+						<div class="mt-6">
+							<button
+								class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+								onclick="addToCart()"
+							>
+								Add to Cart
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Transaction Interface -->
+			<div class="bg-white rounded-lg shadow-md p-6 mt-8">
+				<h3 class="text-xl font-bold mb-4">Transaction Details</h3>
+				<div class="flex justify-between mb-2">
+					<span class="text-gray-700">Total Quantity:</span>
+					<span id="total-quantity" class="font-semibold">1</span>
+				</div>
+				<div class="flex justify-between mb-2">
+					<span class="text-gray-700">Total Amount:</span>
+					<span id="total-amount" class="font-semibold">$49.99</span>
+				</div>
+				<div class="mt-4">
+					<button
+						class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+						onclick="completePurchase()"
+					>
+						Buy Now
+					</button>
+				</div>
+			</div>
+		</main>
+
+		<!-- Footer -->
+		<footer class="bg-white shadow mt-8">
+			<div class="container mx-auto px-4 py-4 text-center">
+				<p class="text-gray-600">
+					&copy; 2024 E-Commerce. All rights reserved.
+				</p>
+			</div>
+		</footer>
+
+		<script>
+			function updateTotal() {
+				const price = parseFloat(
+					document.getElementById("product-price").innerText.replace("$", "")
+				);
+				const quantity = parseInt(document.getElementById("quantity").value);
+				const totalAmount = (price * quantity).toFixed(2);
+				document.getElementById("total-amount").innerText = `$${totalAmount}`;
+				document.getElementById("total-quantity").innerText = quantity;
+			}
+
+			function addToCart() {
+				alert("Product added to cart!");
+				updateTotal();
+			}
+
+			function completePurchase() {
+				alert("Thank you for your purchase!");
+			}
+		</script>
+		<script src="/script.js"></script>
+	</body>
+</html>

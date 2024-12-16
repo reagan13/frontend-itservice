@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>TechSphere - IT Solutions</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+			rel="stylesheet"
+		/>
+	</head>
+	<body class="bg-white text-gray-900 font-sans">
+		<!-- Components -->
+		<div id="navigationBar"></div>
+		<div id="hero-section"></div>
+		<div id="home-products"></div>
+		<div id="home-services"></div>
+		<div id="footer"></div>
+
+		<script>
+			// Dynamically load HTML components and their respective scripts
+			async function loadComponents() {
+				const components = [
+					{ id: "navigationBar", path: "/components/nav.html" },
+					{ id: "hero-section", path: "/components/hero-section.html" },
+					{ id: "home-products", path: "/components/home-products.html" },
+					{ id: "home-services", path: "/components/home-services.html" },
+					{ id: "home-testimonial", path: "/components/home-testimonial.html" },
+					{ id: "footer", path: "/components/footer.html" },
+				];
+
+				try {
+					for (const component of components) {
+						const response = await fetch(component.path);
+						const html = await response.text();
+						document.getElementById(component.id).innerHTML = html;
+
+						// Execute inline scripts of the loaded component
+						executeInlineScripts(document.getElementById(component.id));
+					}
+				} catch (error) {
+					console.error("Error loading components:", error);
+				}
+			}
+
+			// Helper: Execute inline <script> tags of a loaded component
+			function executeInlineScripts(element) {
+				const scripts = element.querySelectorAll("script");
+				scripts.forEach((script) => {
+					const newScript = document.createElement("script");
+					newScript.textContent = script.textContent; // Re-execute inline JS
+					document.body.appendChild(newScript).remove(); // Clean up after execution
+				});
+			}
+
+			// Load components when the page is ready
+			document.addEventListener("DOMContentLoaded", loadComponents);
+		</script>
+		<script src="/script.js"></script>
+	</body>
+</html>

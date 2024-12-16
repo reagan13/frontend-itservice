@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>TechSphere - Product Catalog</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+			rel="stylesheet"
+		/>
+	</head>
+	<body class="bg-gray-50 h-screen">
+		<div id="navigationBar"></div>
+		<!-- Filters Container -->
+		<div
+			class="w-full bg-white rounded-lg shadow-md p-3 md:px-6 p md:py-3 hidden md:block"
+		>
+			<div class="flex flex-wrap items-center between gap-4">
+				<!-- Filters Title -->
+				<h2 class="text-xl font-bold text-blue-600 flex items-center">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5 mr-2"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 16v-4.586L3.293 6.707A1 1 0 013 6V3z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+					Filters
+				</h2>
+
+				<!-- Search Input -->
+				<div class="flex-grow max-w-xs">
+					<input
+						type="text"
+						placeholder="Search products..."
+						id="searchInput"
+						class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+					/>
+				</div>
+
+				<!-- Categories Dropdown -->
+				<div class="relative">
+					<button
+						id="categoriesDropdownBtn"
+						class="flex items-center border rounded px-3 py-2 hover:bg-gray-100"
+					>
+						Categories
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-4 w-4 ml-2"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M19 9l-7 7-7-7"
+							/>
+						</svg>
+					</button>
+					<div
+						id="categoriesDropdown"
+						class="absolute z-10 hidden bg-white border rounded shadow-lg p-3 w-48 right-0 mt-2"
+					>
+						<div class="space-y-2">
+							<div class="flex items-center">
+								<input
+									type="checkbox"
+									id="laptops"
+									class="mr-2"
+									value="Laptops"
+								/>
+								<label for="laptops">Laptops</label>
+							</div>
+							<div class="flex items-center">
+								<input
+									type="checkbox"
+									id="smartphones"
+									class="mr-2"
+									value="Smartphones"
+								/>
+								<label for="smartphones">Smartphones</label>
+							</div>
+							<div class="flex items-center">
+								<input
+									type="checkbox"
+									id="accessories"
+									class="mr-2"
+									value="Accessories"
+								/>
+								<label for="accessories">Accessories</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Price Range -->
+				<div class="flex items-center space-x-2">
+					<span>Price:</span>
+					<input
+						type="number"
+						id="minPrice"
+						placeholder="Min"
+						class="w-20 border rounded px-2 py-2"
+					/>
+					<span>-</span>
+					<input
+						type="number"
+						id="maxPrice"
+						placeholder="Max"
+						class="w-20 border rounded px-2 py-2"
+					/>
+				</div>
+
+				<!-- Quick Ranges Dropdown -->
+				<div class="relative">
+					<button
+						id="priceRangeDropdownBtn"
+						class="flex items-center border rounded px-3 py-2 hover:bg-gray-100"
+					>
+						Price Range
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-4 w-4 ml-2"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M19 9l-7 7-7-7"
+							/>
+						</svg>
+					</button>
+					<div
+						id="priceRangeDropdown"
+						class="absolute z-10 hidden bg-white border rounded shadow-lg p-3 w-48 right-0 mt-2"
+					>
+						<div class="space-y-2">
+							<div class="flex items-center">
+								<input
+									type="radio"
+									name="priceRange"
+									id="under100"
+									class="mr-2"
+									value="0-100"
+								/>
+								<label for="under100">Under $100</label>
+							</div>
+							<div class="flex items-center">
+								<input
+									type="radio"
+									name="priceRange"
+									id="100to500"
+									class="mr-2"
+									value="100-500"
+								/>
+								<label for="100to500">$100 - $500</label>
+							</div>
+							<div class="flex items-center">
+								<input
+									type="radio"
+									name="priceRange"
+									id="500to1000"
+									class="mr-2"
+									value="500-1000"
+								/>
+								<label for="500to1000">$500 - $1000</label>
+							</div>
+							<div class="flex items-center">
+								<input
+									type="radio"
+									name="priceRange"
+									id="over1000"
+									class="mr-2"
+									value="1000+"
+								/>
+								<label for="over1000">Over $1000</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--  Main Content - Products Grid -->
+		<div class="w-full my-5 p-3 md:p-6">
+			<div class="mb-6 space-y-3">
+				<h1 class="text-3xl font-bold text-blue-600">Our Products</h1>
+				<p class="text-gray-600">Browse through our latest tech offerings</p>
+			</div>
+
+			<!-- Products Grid -->
+			<div
+				id="productsGrid"
+				class="flex flex-wrap gap-6 md:gap-10 justify-center"
+			>
+				<!-- Products will be dynamically inserted here -->
+			</div>
+		</div>
+
+		<!-- Quick View Modal -->
+		<div
+			id="quickViewModal"
+			class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center"
+		>
+			<div class="bg-white rounded-lg max-w-4xl w-full p-8 relative">
+				<button
+					id="closeModalBtn"
+					class="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-6 w-6"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M6 18L18 6M6 6l12 12"
+						/>
+					</svg>
+				</button>
+				<div id="modalContent">
+					<!-- Modal content will be dynamically inserted here -->
+				</div>
+			</div>
+		</div>
+
+		<script src="js/products.js"></script>
+		<script>
+			// new
+			// Dynamically load HTML components and their respective scripts
+			async function loadComponents() {
+				const components = [
+					{ id: "navigationBar", path: "/components/nav.html" },
+				];
+
+				try {
+					for (const component of components) {
+						const response = await fetch(component.path);
+						const html = await response.text();
+						document.getElementById(component.id).innerHTML = html;
+
+						// Execute inline scripts of the loaded component
+						executeInlineScripts(document.getElementById(component.id));
+					}
+				} catch (error) {
+					console.error("Error loading components:", error);
+				}
+			}
+
+			// Helper: Execute inline <script> tags of a loaded component
+			function executeInlineScripts(element) {
+				const scripts = element.querySelectorAll("script");
+				scripts.forEach((script) => {
+					const newScript = document.createElement("script");
+					newScript.textContent = script.textContent; // Re-execute inline JS
+					document.body.appendChild(newScript).remove(); // Clean up after execution
+				});
+			}
+
+			// Load components when the page is ready
+			document.addEventListener("DOMContentLoaded", loadComponents);
+		</script>
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				// Categories Dropdown Toggle
+				const categoriesDropdownBtn = document.getElementById(
+					"categoriesDropdownBtn"
+				);
+				const categoriesDropdown =
+					document.getElementById("categoriesDropdown");
+
+				categoriesDropdownBtn.addEventListener("click", () => {
+					categoriesDropdown.classList.toggle("hidden");
+				});
+
+				// Price Range Dropdown Toggle
+				const priceRangeDropdownBtn = document.getElementById(
+					"priceRangeDropdownBtn"
+				);
+				const priceRangeDropdown =
+					document.getElementById("priceRangeDropdown");
+
+				priceRangeDropdownBtn.addEventListener("click", () => {
+					priceRangeDropdown.classList.toggle("hidden");
+				});
+
+				// Close dropdowns when clicking outside
+				document.addEventListener("click", (event) => {
+					if (!categoriesDropdownBtn.contains(event.target)) {
+						categoriesDropdown.classList.add("hidden");
+					}
+					if (!priceRangeDropdownBtn.contains(event.target)) {
+						priceRangeDropdown.classList.add("hidden");
+					}
+				});
+			});
+		</script>
+		<script src="/script.js"></script>
+	</body>
+</html>

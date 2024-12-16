@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>TechSphere - Cart</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+			rel="stylesheet"
+		/>
+	</head>
+	<body class="bg-gray-50 text-gray-900 font-sans">
+		<!-- Navigation -->
+		<div id="navigationBar"></div>
+
+		<!-- Cart Section -->
+		<div class="px-6 pt-10">
+			<h1
+				class="text-4xl font-bold text-blue-600 mb-8 text-center lg:text-left"
+			>
+				Your Shopping Cart
+			</h1>
+
+			<div class="gap-8">
+				<!-- Cart Items -->
+				<div
+					class="space-y-6 max-h-[500px] overflow-y-auto w-full"
+					id="cartItemsContainer"
+				>
+					<!-- Cart items will be dynamically added here -->
+				</div>
+
+				<!-- Order Summary -->
+				<div
+					id="orderSummaryContainer"
+					class="bg-white border border-gray-200 rounded-xl p-6 h-fit"
+				>
+					<h3 class="text-2xl font-bold text-blue-600 mb-6">Order Summary</h3>
+
+					<div class="space-y-4 mb-6">
+						<div class="flex justify-between">
+							<span>Subtotal</span>
+							<span id="subtotalDisplay">₱ 0.00</span>
+						</div>
+						<div class="flex justify-between">
+							<span>Shipping Fee</span>
+							<span id="taxDisplay">₱ 50.00</span>
+						</div>
+						<div class="flex justify-between font-bold text-blue-600">
+							<span>Total</span>
+							<span id="totalDisplay">₱ 0.00</span>
+						</div>
+					</div>
+
+					<button
+						id="checkoutButton"
+						class="w-full bg-blue-600 text-white py-3 rounded-full hover:bg-blue-700 transition-colors"
+					>
+						Proceed to Checkout
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<script src="./js/cart.js"></script>
+		<script>
+			// new
+			// Dynamically load HTML components and their respective scripts
+			async function loadComponents() {
+				const components = [
+					{ id: "navigationBar", path: "/components/nav.html" },
+				];
+
+				try {
+					for (const component of components) {
+						const response = await fetch(component.path);
+						const html = await response.text();
+						document.getElementById(component.id).innerHTML = html;
+
+						// Execute inline scripts of the loaded component
+						executeInlineScripts(document.getElementById(component.id));
+					}
+				} catch (error) {
+					console.error("Error loading components:", error);
+				}
+			}
+
+			// Helper: Execute inline <script> tags of a loaded component
+			function executeInlineScripts(element) {
+				const scripts = element.querySelectorAll("script");
+				scripts.forEach((script) => {
+					const newScript = document.createElement("script");
+					newScript.textContent = script.textContent; // Re-execute inline JS
+					document.body.appendChild(newScript).remove(); // Clean up after execution
+				});
+			}
+
+			// Load components when the page is ready
+			document.addEventListener("DOMContentLoaded", loadComponents);
+		</script>
+		<script src="/script.js"></script>
+	</body>
+</html>

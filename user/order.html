@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>TechSphere - Order History</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+			rel="stylesheet"
+		/>
+	</head>
+	<body class="bg-gray-50 text-gray-900">
+		<!-- Navigation -->
+		<div id="navigationBar" class="sticky w-full top-0 fixed z-50"></div>
+
+		<!-- Order History Section -->
+		<div class="mx-auto px-4 pt-8">
+			<div class="flex flex-col sm:flex-row justify-between items-center mb-8">
+				<h1
+					class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-4 sm:mb-0"
+				>
+					Order History
+				</h1>
+				<div class="w-full sm:w-auto">
+					<input
+						type="text"
+						id="searchOrder"
+						placeholder="Search Orders"
+						class="border border-gray-300 rounded-md px-3 py-2 w-full sm:w-64"
+					/>
+				</div>
+			</div>
+
+			<!-- Loading Indicator -->
+			<div
+				id="loadingIndicator"
+				class="flex justify-center items-center py-12 hidden"
+			>
+				<div
+					class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"
+				></div>
+			</div>
+
+			<!-- Order List -->
+			<div id="orderListContainer" class="space-y-4 sm:space-y-6">
+				<!-- Orders will be dynamically inserted here -->
+			</div>
+
+			<!-- No Orders Placeholder -->
+			<div id="noOrdersPlaceholder" class="hidden text-center py-12">
+				<i class="fas fa-box-open text-4xl sm:text-6xl text-gray-300 mb-4"></i>
+				<h2 class="text-xl sm:text-2xl font-semibold text-gray-600">
+					No Orders Yet
+				</h2>
+				<p class="text-sm sm:text-base text-gray-500 mt-2">
+					Start shopping to see your order history.
+				</p>
+				<a
+					href="products.html"
+					class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 sm:px-6 sm:py-2 rounded-full hover:bg-blue-700"
+				>
+					Shop Now
+				</a>
+			</div>
+		</div>
+
+		<!-- Order Details Modal -->
+		<div
+			id="orderDetailsModal"
+			class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4 overflow-y-auto"
+		>
+			<div
+				class="bg-white rounded-xl w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl relative my-8 mx-auto shadow-xl transform transition-all duration-300 ease-in-out scale-95 opacity-0 translate-y-4 modal-container"
+			>
+				<div class="relative p-4 sm:p-6 md:p-8">
+					<button
+						id="closeOrderModal"
+						class="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-600 hover:text-gray-900 z-10"
+					>
+						<i class="fas fa-times text-xl sm:text-2xl"></i>
+					</button>
+
+					<div id="orderModalContent" class="mt-4">
+						<!-- Dynamic order details will be inserted here -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			class OrderManager {
+				constructor() {
+					this.orderListContainer =
+						document.getElementById("orderListContainer");
+					this.orderDetailsModal = document.getElementById("orderDetailsModal");
+					this.orderModalContent = document.getElementById("orderModalContent");
+					this.searchOrder = document.getElementById("searchOrder");
+					this.loadingIndicator = document.getElementById("loadingIndicator");
+					this.noOrdersPlaceholder = document.getElementById(
+						"noOrdersPlaceholder"
+					);
+
+					this.orders = []; // Will store fetched orders
+					this.initEventListeners();
+					this.fetchOrders();
+				}
+
+				initEventListeners() {
+					// Search orders
+					this.searchOrder.addEventListener("input", () => this.renderOrders());
+
+					// Close modal
+					document
+						.getElementById("closeOrderModal")
+						.addEventListener("click", () => {
+							this.orderDetailsModal.classList.add("hidden");
+						});
+
+					// Close modal when clicking outside
+					this.orderDetailsModal.addEventListener("click", (e) => {
+						if (e.target === this.orderDetailsModal) {
+							this.orderDetailsModal.classList.add("hidden");
+						}
+					});
+				}
+
+				async fetchOrders() {
+					// Show loading indicator
+					this.loadingIndicator.classList.remove("hidden");
+					this.orderListContainer.innerHTML = "";
+					this.noOrdersPlaceholder.classList.add("hidden");
+
+					try {
+						const userId = localStorage.getItem("userId");
+						if (!userId) {
+							throw new Error("User not logged in");
+						}
+
+						// Update this line to use full backend URL
+						const response = await fetch(
+							`http://localhost:3000/api/orders?userId=${userId}`,
+							{
+								method: "GET",
+								headers: {
+									"Content-Type": "application/json",
+								},
+							}
+						);
+
+						if (!response.ok) {
+							// Log the error response
+							const errorBody = await response.text();
+							console.error("Error response:", errorBody);
+							throw new Error("Failed to fetch orders");
+						}
+
+						this.orders = await response.json();
+
+						// Hide loading indicator
+						this.loadingIndicator.classList.add("hidden");
+
+						this.renderOrders();
+					} catch (error) {
+						console.error("Error fetching orders:", error);
+
+						// Hide loading indicator
+						this.loadingIndicator.classList.add("hidden");
+
+						// Show error message or handle accordingly
+						this.showErrorState(error.message);
+					}
+				}
+				showErrorState(message) {
+					this.orderListContainer.innerHTML = `
+                <div class="text-center py-12 bg-red-50 rounded-lg">
+                    <i class="fas fa-exclamation-triangle text-6xl text-red-500 mb-4"></i>
+                    <h2 class="text-2xl font-semibold text-red-600">Error</h2>
+                    <p class="text-red-500 mt-2">${message}</p>
+                    <button onclick="window.location.reload()" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700">
+                        Try Again
+                    </button>
+                </div>
+            `;
+				}
+
+				renderOrders() {
+					const searchValue = this.searchOrder.value.toLowerCase();
+					this.orderListContainer.innerHTML = "";
+
+					const filteredOrders = this.orders.filter((order) => {
+						return order.id.toLowerCase().includes(searchValue);
+					});
+
+					// Show no orders placeholder if no orders or no filtered orders
+					if (this.orders.length === 0) {
+						this.noOrdersPlaceholder.classList.remove("hidden");
+						return;
+					}
+
+					if (filteredOrders.length === 0) {
+						this.orderListContainer.innerHTML = `
+                    <div class="text-center py-12 bg-gray-100 rounded-lg">
+                        <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-600">No orders match your search</p>
+                    </div>
+                `;
+						return;
+					}
+
+					filteredOrders.forEach((order) => this.renderOrderItem(order));
+				}
+
+				renderOrderItem(order) {
+					const orderItemElement = document.createElement("div");
+					orderItemElement.classList.add(
+						"bg-white",
+						"border",
+						"border-gray-200",
+						"rounded-xl",
+						"p-4",
+						"sm:p-6",
+						"flex",
+						"flex-col",
+						"sm:flex-row",
+						"justify-between",
+						"items-center",
+						"space-y-2",
+						"sm:space-y-0"
+					);
+					orderItemElement.innerHTML = `
+                <div class="w-full sm:w-auto text-center sm:text-left">
+                    <h2 class="text-lg sm:text-xl font-bold">Order ID: ${
+											order.id
+										}</h2>
+                    <p class="text-sm text-gray-600">Date: ${order.date}</p>
+                </div>
+                <div class="w-full sm:w-auto text-center sm:text-right">
+                    <span class="text-base sm:text-lg font-bold block mb-2">₱${order.total.toFixed(
+											2
+										)}</span>
+                    <button class="text-blue-600 hover:underline view-details text-sm" data-id="${
+											order.id
+										}">
+                        View Details
+                    </button>
+                </div>
+            `;
+					this.orderListContainer.appendChild(orderItemElement);
+
+					// Add event listener for view details button
+					orderItemElement
+						.querySelector(".view-details")
+						.addEventListener("click", () => {
+							this.showOrderDetails(order);
+						});
+				}
+
+				showOrderDetails(order) {
+					this.orderModalContent.innerHTML = `
+                <h2 class="text-xl sm:text-2xl font-bold mb-4">Order Details: ${
+									order.id
+								}</h2>
+                <p class="text-sm sm:text-base text-gray-600 mb-2">Date: ${
+									order.date
+								}</p>
+                <h3 class="text-lg sm:text-xl font-bold mb-2">Items:</h3>
+                <div class="space-y-4">
+                    ${order.items
+											.map(
+												(item) => `
+                        <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                            <img src="${
+															item.image
+														}" class="w-24 h-24 sm:w-16 sm:h-16 object-cover rounded-lg" />
+                            <div class="text-center sm:text-left">
+                                <h4 class="text-base sm:text-lg font-bold">${
+																	item.name
+																}</h4>
+                                <p class="text-sm text-gray-600">Price: ₱${item.price.toFixed(
+																	2
+																)} x ${item.quantity}</p>
+                            </div>
+                        </div>
+                    `
+											)
+											.join("")}
+                </div>
+                <h3 class="text-lg sm:text-xl font-bold mt-4 text-center sm:text-left">
+                    Total: ₱${order.total.toFixed(2)}
+                </h3>
+            `;
+					this.orderDetailsModal.classList.remove("hidden");
+				}
+			}
+
+			// Initialize Order Manager
+			new OrderManager();
+		</script>
+		<script>
+			// new
+			// Dynamically load HTML components and their respective scripts
+			async function loadComponents() {
+				const components = [
+					{ id: "navigationBar", path: "/components/nav.html" },
+				];
+
+				try {
+					for (const component of components) {
+						const response = await fetch(component.path);
+						const html = await response.text();
+						document.getElementById(component.id).innerHTML = html;
+
+						// Execute inline scripts of the loaded component
+						executeInlineScripts(document.getElementById(component.id));
+					}
+				} catch (error) {
+					console.error("Error loading components:", error);
+				}
+			}
+
+			// Helper: Execute inline <script> tags of a loaded component
+			function executeInlineScripts(element) {
+				const scripts = element.querySelectorAll("script");
+				scripts.forEach((script) => {
+					const newScript = document.createElement("script");
+					newScript.textContent = script.textContent; // Re-execute inline JS
+					document.body.appendChild(newScript).remove(); // Clean up after execution
+				});
+			}
+
+			// Load components when the page is ready
+			document.addEventListener("DOMContentLoaded", loadComponents);
+		</script>
+		<script>
+			// Add this script to handle modal animations
+			document.addEventListener("DOMContentLoaded", () => {
+				const orderDetailsModal = document.getElementById("orderDetailsModal");
+				const modalContainer =
+					orderDetailsModal.querySelector(".modal-container");
+
+				function openModal() {
+					orderDetailsModal.classList.remove("hidden");
+					setTimeout(() => {
+						modalContainer.classList.remove(
+							"opacity-0",
+							"scale-95",
+							"translate-y-4"
+						);
+						modalContainer.classList.add(
+							"opacity-100",
+							"scale-100",
+							"translate-y-0"
+						);
+					}, 50);
+				}
+
+				function closeModal() {
+					modalContainer.classList.add(
+						"opacity-0",
+						"scale-95",
+						"translate-y-4"
+					);
+					modalContainer.classList.remove(
+						"opacity-100",
+						"scale-100",
+						"translate-y-0"
+					);
+
+					setTimeout(() => {
+						orderDetailsModal.classList.add("hidden");
+					}, 300);
+				}
+
+				// Modify the existing showOrderDetails method
+				OrderManager.prototype.showOrderDetails = function (order) {
+					this.orderModalContent.innerHTML = `
+				             <div class="text-center md:text-left">
+				                 <h2 class="text-xl sm:text-2xl font-bold mb-4">Order Details: ${
+														order.id
+													}</h2>
+				                 <p class="text-sm sm:text-base text-gray-600 mb-4">Date: ${
+														order.date
+													}</p>
+
+				                 <h3 class="text-lg sm:text-xl font-bold mb-4">Items:</h3>
+				                 <div class="space-y-4">
+				                     ${order.items
+																.map((item) => {
+																	const FALLBACK_IMAGE =
+																		"/PICTURES/no-image.jpg";
+																	const imageUrl = item.image || FALLBACK_IMAGE;
+
+																	return `
+																	 <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4
+				                                     border-b pb-4 last:border-b-0">
+				                             <img src="${imageUrl}"
+				                                  class="w-24 h-24 md:w-16 md:h-16 object-cover rounded-lg mb-2 md:mb-0"
+										 onerror="
+				                             console.error('Image failed to load:', this.src);
+				                             this.onerror=null;
+				                             this.src='${FALLBACK_IMAGE}'
+				                         "
+								/>
+				                             <div class="text-center md:text-left flex-grow">
+				                                 <h4 class="text-base md:text-lg font-bold">${
+																						item.name
+																					}</h4>
+				                                 <p class="text-sm text-gray-600">
+				                                     Price: ₱${item.price.toFixed(2)} x ${
+																		item.quantity
+																	}
+				                                 </p>
+				                             </div>
+				                             <div class="font-semibold text-blue-600">
+				                                 ₱${(item.price * item.quantity).toFixed(2)}
+				                             </div>
+				                         </div>
+																	`;
+																})
+																.join("")}
+				                 </div>
+
+				                 <div class="mt-6 flex justify-between items-center
+				                             border-t pt-4">
+				                     <span class="text-lg md:text-xl font-bold">Total:</span>
+				                     <span class="text-xl md:text-2xl font-bold text-blue-600">
+				                         ₱${order.total.toFixed(2)}
+				                     </span>
+				                 </div>
+				             </div>
+				         `;
+
+					// Use the new open modal function
+					openModal();
+				};
+
+				// Modify existing event listeners
+				document
+					.getElementById("closeOrderModal")
+					.addEventListener("click", closeModal);
+
+				// Close modal when clicking outside
+				orderDetailsModal.addEventListener("click", (e) => {
+					if (e.target === orderDetailsModal) {
+						closeModal();
+					}
+				});
+			});
+		</script>
+		<script src="/script.js"></script>
+	</body>
+</html>
