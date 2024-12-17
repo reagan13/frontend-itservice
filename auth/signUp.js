@@ -113,10 +113,13 @@ document.addEventListener("DOMContentLoaded", () => {
 				confirm_password: confirmPasswordInput.value,
 			};
 			const url =
-				"https://backend-itservice.onrender.com/api/signup" ||
-				"http://localhost:3000/api/signup";
+				window.location.hostname === "localhost" ||
+				window.location.hostname === "127.0.0.1"
+					? "http://localhost:3000/api/signup"
+					: "https://backend-itservice.onrender.com/api/signin";
+
 			// Send signup request
-			const response = await fetch(`${url}`, {
+			const response = await fetch(url, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
