@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				window.location.hostname === "localhost" ||
 				window.location.hostname === "127.0.0.1"
 					? "http://localhost:3000/api/signup"
-					: "https://backend-itservice.onrender.com/api/signin";
+					: "https://backend-itservice.onrender.com/api/signup";
 
 			// Send signup request
 			const response = await fetch(url, {
