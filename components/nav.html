@@ -164,12 +164,15 @@
 
 	// Logout Functionality
 	function handleLogout() {
+		alert("You have been logged out!");
 		// Clear user authentication
 		localStorage.removeItem("userId");
-		localStorage.removeItem("userToken");
+		localStorage.removeItem("userEmail");
+		localStorage.removeItem("userRole");
+		localStorage.removeItem("userName");
 
 		// Redirect to login page
-		window.location.href = "login.html";
+		window.location.href = "/auth/sign-in.html";
 	}
 
 	// Desktop Logout
