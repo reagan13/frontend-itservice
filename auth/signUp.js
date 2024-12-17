@@ -112,18 +112,17 @@ document.addEventListener("DOMContentLoaded", () => {
 				password: passwordInput.value,
 				confirm_password: confirmPasswordInput.value,
 			};
-
+			const url =
+				"https://backend-itservice.onrender.com/api/signup" ||
+				"http://localhost:3000/api/signup";
 			// Send signup request
-			const response = await fetch(
-				"https://backend-itservices.onrender.com/api/signup",
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(formData),
-				}
-			);
+			const response = await fetch(`${url}`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
 
 			const data = await response.json();
 

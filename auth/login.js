@@ -54,9 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
 				email: emailInput.value.trim(),
 				password: passwordInput.value,
 			};
+			const url =
+				window.location.hostname === "localhost" ||
+				window.location.hostname === "127.0.0.1"
+					? "http://localhost:3000/api/signin"
+					: "https://backend-itservice.onrender.com/api/signin";
 
 			// Send login request
-			const response = await fetch("http://localhost:3000/api/signin", {
+			const response = await fetch(url, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
