@@ -22,9 +22,10 @@
 				<div class="flex justify-between items-center">
 					<span class="text-2xl font-bold text-blue-600">$599.99</span>
 					<button
-						class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
+						data-product="gpu"
+						class="buy-now-btn bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
 					>
-						Add to Cart
+						Buy Now
 					</button>
 				</div>
 			</div>
@@ -45,9 +46,10 @@
 				<div class="flex justify-between items-center">
 					<span class="text-2xl font-bold text-blue-600">$1,299.99</span>
 					<button
-						class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
+						data-product="laptop"
+						class="buy-now-btn bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
 					>
-						Add to Cart
+						Buy Now
 					</button>
 				</div>
 			</div>
@@ -70,12 +72,130 @@
 				<div class="flex justify-between items-center">
 					<span class="text-2xl font-bold text-blue-600">$199.99</span>
 					<button
-						class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
+						data-product="headphones"
+						class="buy-now-btn bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
 					>
-						Add to Cart
+						Buy Now
 					</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </section>
+
+<script>
+	// Debugging logs
+	console.log("Script is loading");
+
+	// Product Catalog
+	const productCatalog = {
+		gpu: { id: 1, name: "High-Performance GPU", price: 599.99 },
+		laptop: { id: 2, name: "Gaming Laptop", price: 1299.99 },
+		headphones: { id: 3, name: "Wireless Headphones", price: 199.99 },
+	};
+
+	// Attach event listeners manually
+	function attachEventListeners() {
+		console.log("Attaching event listeners");
+		const buyButtons = document.querySelectorAll(".buy-now-btn");
+		console.log("Number of buy buttons found:", buyButtons.length);
+
+		buyButtons.forEach((button) => {
+			button.addEventListener("click", function (e) {
+				console.log("Button clicked!");
+				console.log("Product:", this.getAttribute("data-product"));
+
+				const productKey = this.getAttribute("data-product");
+				placeOrder(productKey);
+			});
+		});
+	}
+
+	async function placeOrder(productKey) {
+		// Create overlay for loading/error state
+		const overlay = document.createElement("div");
+		overlay.className =
+			"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
+		overlay.innerHTML = `
+        <div class="bg-white p-8 rounded-lg text-center">
+            <div class="spinner">Processing order...</div>
+        </div>
+    `;
+		document.body.appendChild(overlay);
+
+		try {
+			// Get user ID from localStorage
+			const userId = localStorage.getItem("userId");
+			if (!userId) {
+				throw new Error("User not logged in");
+			}
+
+			// Get product details
+			const product = productCatalog[productKey];
+			if (!product) {
+				throw new Error("Product not found");
+			}
+
+			// Prepare order data
+			const orderData = {
+				userId: parseInt(userId),
+				productId: product.id,
+				quantity: 1, // Default to 1
+			};
+
+			// Send order to backend
+			const response = await fetch("http://localhost:3000/api/single-order", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(orderData),
+			});
+
+			// Check response
+			if (!response.ok) {
+				const errorText = await response.text();
+				throw new Error(
+					`Order creation failed: ${response.status} ${errorText}`
+				);
+			}
+
+			// Process successful order
+			const orderConfirmation = await response.json();
+			console.log("Order created successfully:", orderConfirmation);
+
+			// Remove overlay
+			overlay.remove();
+
+			// Redirect to order confirmation page
+			window.location.href = `order-confirmation.html?orderId=${orderConfirmation.id}`;
+		} catch (error) {
+			console.error("Buy Now Error:", error);
+
+			// Show error in overlay
+			const errorDiv = document.createElement("div");
+			errorDiv.className = "text-red-500 mt-4 text-center";
+			errorDiv.textContent = `Error: ${error.message}`;
+
+			// Clear previous content and add error
+			const overlayContent = overlay.querySelector(".bg-white");
+			overlayContent.innerHTML = "";
+			overlayContent.appendChild(errorDiv);
+
+			// Add close button
+			const closeButton = document.createElement("button");
+			closeButton.textContent = "Close";
+			closeButton.className = "mt-4 bg-red-500 text-white px-4 py-2 rounded";
+			closeButton.addEventListener("click", () => overlay.remove());
+			overlayContent.appendChild(closeButton);
+		}
+	}
+	// Multiple event binding methods
+	document.addEventListener("DOMContentLoaded", attachEventListeners);
+
+	// Fallback method
+	window.addEventListener("load", attachEventListeners);
+
+	// Immediate invocation as a backup
+	attachEventListeners();
+</script>

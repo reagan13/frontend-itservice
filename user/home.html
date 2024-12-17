@@ -9,54 +9,157 @@
 			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
 			rel="stylesheet"
 		/>
+		<style>
+			/* Optional: Add some basic styling for component loading */
+			.component-loading {
+				opacity: 0.5;
+				pointer-events: none;
+			}
+			.component-error {
+				background-color: #ffdddd;
+				border: 1px solid #ff0000;
+				padding: 10px;
+				margin: 10px 0;
+			}
+		</style>
 	</head>
 	<body class="bg-white text-gray-900 font-sans">
-		<!-- Components -->
+		<!-- Component Containers -->
 		<div id="navigationBar"></div>
 		<div id="hero-section"></div>
 		<div id="home-products"></div>
 		<div id="home-services"></div>
+
 		<div id="footer"></div>
 
 		<script>
-			// Dynamically load HTML components and their respective scripts
-			async function loadComponents() {
-				const components = [
-					{ id: "navigationBar", path: "/components/nav.html" },
-					{ id: "hero-section", path: "/components/hero-section.html" },
-					{ id: "home-products", path: "/components/home-products.html" },
-					{ id: "home-services", path: "/components/home-services.html" },
-					{ id: "home-testimonial", path: "/components/home-testimonial.html" },
-					{ id: "footer", path: "/components/footer.html" },
-				];
+			// Comprehensive Component Loading Utility
+			const ComponentLoader = {
+				// Configuration for components
+				components: [
+					{
+						id: "navigationBar",
+						path: "/components/nav.html",
+						optional: false,
+					},
+					{
+						id: "hero-section",
+						path: "/components/hero-section.html",
+						optional: false,
+					},
+					{
+						id: "home-products",
+						path: "/components/home-products.html",
+						optional: false,
+					},
+					{
+						id: "home-services",
+						path: "/components/home-services.html",
+						optional: true,
+					},
+					{
+						id: "home-testimonial",
+						path: "/components/home-testimonial.html",
+						optional: true,
+					},
+					{
+						id: "footer",
+						path: "/components/footer.html",
+						optional: false,
+					},
+				],
 
-				try {
-					for (const component of components) {
-						const response = await fetch(component.path);
-						const html = await response.text();
-						document.getElementById(component.id).innerHTML = html;
+				// Utility to create error message
+				createErrorMessage(componentId, error) {
+					return `
+						<div class="component-error">
+							<h3>Failed to Load Component: ${componentId}</h3>
+							<p>${error.message}</p>
+						</div>
+					`;
+				},
 
-						// Execute inline scripts of the loaded component
-						executeInlineScripts(document.getElementById(component.id));
+				// Execute scripts within a loaded component
+				executeScripts(container) {
+					const scripts = container.querySelectorAll("script");
+					scripts.forEach((script) => {
+						const newScript = document.createElement("script");
+
+						// Handle inline and external scripts
+						if (script.src) {
+							newScript.src = script.src;
+						} else {
+							newScript.textContent = script.textContent;
+						}
+
+						document.body.appendChild(newScript);
+					});
+				},
+
+				// Main component loading method
+				async loadComponent(component) {
+					const container = document.getElementById(component.id);
+
+					if (!container) {
+						if (!component.optional) {
+							console.error(`Critical container missing: ${component.id}`);
+						}
+						return;
 					}
-				} catch (error) {
-					console.error("Error loading components:", error);
-				}
-			}
 
-			// Helper: Execute inline <script> tags of a loaded component
-			function executeInlineScripts(element) {
-				const scripts = element.querySelectorAll("script");
-				scripts.forEach((script) => {
-					const newScript = document.createElement("script");
-					newScript.textContent = script.textContent; // Re-execute inline JS
-					document.body.appendChild(newScript).remove(); // Clean up after execution
-				});
-			}
+					try {
+						// Add loading state
+						container.classList.add("component-loading");
 
-			// Load components when the page is ready
-			document.addEventListener("DOMContentLoaded", loadComponents);
+						// Fetch component
+						const response = await fetch(component.path);
+
+						if (!response.ok) {
+							throw new Error(`HTTP error! status: ${response.status}`);
+						}
+
+						// Load HTML content
+						const html = await response.text();
+						container.innerHTML = html;
+
+						// Execute any scripts
+						this.executeScripts(container);
+
+						// Remove loading state
+						container.classList.remove("component-loading");
+					} catch (error) {
+						console.error(`Component load error: ${component.id}`, error);
+
+						// Handle non-optional component failure
+						if (!component.optional) {
+							container.innerHTML = this.createErrorMessage(
+								component.id,
+								error
+							);
+						}
+					}
+				},
+
+				// Initialize component loading
+				async init() {
+					try {
+						// Load components sequentially
+						for (const component of this.components) {
+							await this.loadComponent(component);
+						}
+					} catch (error) {
+						console.error("Critical error in component loading:", error);
+					}
+				},
+			};
+
+			// Initialize component loader when DOM is ready
+			document.addEventListener("DOMContentLoaded", () => {
+				ComponentLoader.init();
+			});
 		</script>
+
+		<!-- Optional: Global application script -->
 		<script src="/script.js"></script>
 	</body>
 </html>

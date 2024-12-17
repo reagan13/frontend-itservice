@@ -1,40 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-	const signinForm = document.querySelector(".Sign-In");
-	const emailInput = signinForm.querySelector('input[type="email"]');
-	const passwordInput = signinForm.querySelector('input[type="password"]');
-	const submitButton = signinForm.querySelector(".signupsubmit");
-
-	// Create Alert Div Function
-	function createAlertDiv(message, isSuccess) {
-		const alertDiv = document.createElement("div");
-		alertDiv.style.position = "fixed";
-		alertDiv.style.top = "20px";
-		alertDiv.style.left = "50%";
-		alertDiv.style.transform = "translateX(-50%)";
-		alertDiv.style.padding = "15px";
-		alertDiv.style.backgroundColor = isSuccess ? "#4CAF50" : "#f44336";
-		alertDiv.style.color = "white";
-		alertDiv.style.borderRadius = "5px";
-		alertDiv.style.zIndex = "1000";
-		alertDiv.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
-		alertDiv.textContent = message;
-		return alertDiv;
-	}
-
-	// Show Message Function
-	function showMessage(message, isSuccess = false) {
-		const alertDiv = createAlertDiv(message, isSuccess);
-		document.body.appendChild(alertDiv);
-
-		setTimeout(() => {
-			document.body.removeChild(alertDiv);
-
-			if (isSuccess) {
-				// Redirect to user home page
-				window.location.href = "/user/home.html";
-			}
-		}, 3000);
-	}
+	// Select elements using the correct selectors
+	const signinForm = document.querySelector('form[method="post"]');
+	const emailInput = document.querySelector('input[name="email"]');
+	const passwordInput = document.querySelector('input[name="password"]');
+	const submitButton = document.getElementById("submit");
 
 	// Validate Email
 	function validateEmail(email) {
@@ -64,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Handle Sign In
 	async function handleSignIn(event) {
 		event.preventDefault();
+		console.log("Sign-in form submitted");
 
 		// Validate form
 		const validationErrors = validateForm();
@@ -84,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				email: emailInput.value.trim(),
 				password: passwordInput.value,
 			};
-			alert(loginData);
+
 			// Send login request
 			const response = await fetch("http://localhost:3000/api/signin", {
 				method: "POST",
@@ -93,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				},
 				body: JSON.stringify(loginData),
 			});
-			alert(response);
+
 			const data = await response.json();
 
 			if (!response.ok) {
@@ -109,12 +79,13 @@ document.addEventListener("DOMContentLoaded", () => {
 			localStorage.setItem("userRole", data.role);
 
 			// Successful sign-in
-			showMessage("Sign-in successful! Redirecting...", true);
+			alert("Sign-in successful");
+			window.location.href = "/user/home.html";
 		} catch (error) {
 			console.error("Sign-in error:", error);
 
 			// Show error message
-			showMessage(error.message || "An error occurred during sign-in", false);
+			alert("Sign-in failed. Please check your email and password.");
 		} finally {
 			// Re-enable submit button
 			submitButton.disabled = false;
