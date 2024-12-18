@@ -22,8 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
 			// If not on a public page, redirect to login
 			if (!publicPages.some((page) => currentPath.includes(page))) {
 				alert("You need to login to access this page");
-				if (!currentPath.includes("/auth/sign-in.html")) {
-					window.location.href = "/auth/sign-in.html";
+				if (!currentPath.includes("auth/sign-in.html")) {
+					window.location.href = "auth/sign-in.html";
 					return;
 				}
 			}
