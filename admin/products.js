@@ -30,7 +30,7 @@ function renderProducts(products) {
 		productCard.className = "bg-white shadow-md rounded-lg overflow-hidden";
 		productCard.innerHTML = `
 <img 
-    src="${product.image || "/PICTURES/no-image.jpg"}" 
+    src="${product.image || "../PICTURES/no-image.jpg"}" 
     onerror="this.onerror=null; this.src='/PICTURES/no-image.jpg'"
     alt="${product.name}" 
     class="w-full h-48 object-cover"
@@ -312,7 +312,7 @@ function logout() {
 	const confirmLogout = confirm("Are you sure you want to log out?");
 	if (confirmLogout) {
 		// Implement logout logic (e.g., clear token, redirect)
-		window.location.href = "/login.html";
+		window.location.href = "../auth/sign-in.html";
 	}
 }
 
