@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			// Successful sign-in
 			alert("Sign-in successful");
-			window.location.href = "/user/home.html";
+			window.location.href = "../user/home.html";
 		} catch (error) {
 			console.error("Sign-in error:", error);
 
