@@ -252,19 +252,21 @@ async function fetchProducts() {
 		renderProducts();
 	} catch (error) {
 		console.error("Fetch error:", error);
+		alert("Failed to load products. Please try again later.");
 		productsGrid.innerHTML = `
 						<div class="col-span-5 text-center py-10">
 							<h2 class="text-2xl font-bold text-gray-600 mb-4">
 								Unable to Load Products
 							</h2>
-							<p class="text-gray-500">
-								${error.message}
-							</p>
-							<p class="text-red-500 mt-2">
-								Please check your backend connection and try again.
-							</p>
+							
 						</div>
 					`;
+		// <p class="text-gray-500">
+		// 						${error.message}
+		// 					</p>
+		// 					<p class="text-red-500 mt-2">
+		// 						Please check your backend connection and try again.
+		// 					</p>
 	}
 }
 // Function to add product to cart
