@@ -1,5 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-	const signupForm = document.querySelector(".Sign-Up");
+	const isLogin = localStorage.getItem("userId");
+	if (isLogin) {
+		alert("You are already logged in. Please Log out to sign up");
+		window.location.href = "../user/home.html";
+	}
+
+	const signupForm = document.getElementById("signUpForm");
 	const firstNameInput = signupForm.querySelector('input[name="first_name"]');
 	const lastNameInput = signupForm.querySelector('input[name="last_name"]');
 	const emailInput = signupForm.querySelector('input[name="email"]');
@@ -7,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const confirmPasswordInput = signupForm.querySelector(
 		'input[name="confirm_password"]'
 	);
-	const submitButton = signupForm.querySelector(".signupsubmit");
+	const submitButton = signupForm.querySelector('button[type="submit"]');
 
 	// Validation Functions
 	function validateEmail(email) {
@@ -19,37 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		// At least 8 characters, one uppercase, one lowercase, one number
 		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 		return passwordRegex.test(password);
-	}
-
-	// Create Alert Div
-	function createAlertDiv(message, isSuccess) {
-		const alertDiv = document.createElement("div");
-		alertDiv.style.position = "fixed";
-		alertDiv.style.top = "20px";
-		alertDiv.style.left = "50%";
-		alertDiv.style.transform = "translateX(-50%)";
-		alertDiv.style.padding = "15px";
-		alertDiv.style.backgroundColor = isSuccess ? "#4CAF50" : "#f44336";
-		alertDiv.style.color = "white";
-		alertDiv.style.borderRadius = "5px";
-		alertDiv.style.zIndex = "1000";
-		alertDiv.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
-		alertDiv.textContent = message;
-		return alertDiv;
-	}
-
-	// Show Error/Success Message
-	function showMessage(message, isSuccess = false) {
-		const alertDiv = createAlertDiv(message, isSuccess);
-		document.body.appendChild(alertDiv);
-
-		setTimeout(() => {
-			document.body.removeChild(alertDiv);
-
-			if (isSuccess) {
-				window.location.href = "sign-in.html";
-			}
-		}, 3000);
 	}
 
 	// Validate Form
@@ -95,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		// If there are validation errors, show them
 		if (validationErrors.length > 0) {
-			showMessage(validationErrors[0], false);
+			alert(validationErrors[0]);
 			return;
 		}
 
@@ -112,6 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				password: passwordInput.value,
 				confirm_password: confirmPasswordInput.value,
 			};
+
 			const url =
 				window.location.hostname === "localhost" ||
 				window.location.hostname === "127.0.0.1"
@@ -127,17 +103,43 @@ document.addEventListener("DOMContentLoaded", () => {
 				body: JSON.stringify(formData),
 			});
 
-			const data = await response.json();
+			// Log the full response for debugging
+			console.log("Response status:", response.status);
 
-			if (!response.ok) {
-				throw new Error(data.error || "Signup failed");
+			// Try to parse response body
+			let data;
+			try {
+				data = await response.json();
+				console.log("Response data:", data);
+			} catch (parseError) {
+				console.error("Failed to parse response:", parseError);
+				const responseText = await response.text();
+				console.log("Response text:", responseText);
 			}
 
-			// Successful signup
-			showMessage("Signup successful! Redirecting to login...", true);
+			// Check response status
+			if (!response.ok) {
+				// Throw error with more detailed message
+				throw new Error(
+					data?.error ||
+						data?.message ||
+						`Signup failed with status ${response.status}`
+				);
+			}
+
+			// Success handling
+			alert("Signup successful! Redirecting to login...");
+			window.location.href = "sign-in.html";
 		} catch (error) {
-			console.error("Signup error:", error);
-			showMessage(error.message || "An error occurred during signup", false);
+			// Detailed error logging
+			console.error("Signup error details:", {
+				message: error.message,
+				name: error.name,
+				stack: error.stack,
+			});
+
+			// User-friendly error message
+			alert(error.message || "Signup failed! Please try again.");
 		} finally {
 			// Re-enable submit button
 			submitButton.disabled = false;
@@ -145,6 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	}
 
-	// Add event listeners
+	// Add event listener
 	signupForm.addEventListener("submit", handleSignup);
 });

@@ -1,4 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
+	const isLogin = localStorage.getItem("userId");
+	if (isLogin) {
+		alert("You are already logged in");
+		window.location.href = "../user/home.html";
+	}
 	// Select elements using the correct selectors
 	const signinForm = document.querySelector('form[method="post"]');
 	const emailInput = document.querySelector('input[name="email"]');
