@@ -11,11 +11,11 @@
 
 		<!-- Desktop Navigation -->
 		<div class="hidden md:flex items-center space-x-6 text-lg">
-			<a href="./home.html" class="text-white hover:text-blue-300">Home</a>
-			<a href="./services.html" class="text-white hover:text-blue-300"
+			<a href="/index.html" class="text-white hover:text-blue-300">Home</a>
+			<a href="/services.html" class="text-white hover:text-blue-300"
 				>Services</a
 			>
-			<a href="./products.html" class="text-white hover:text-blue-300"
+			<a href="/products.html" class="text-white hover:text-blue-300"
 				>Products</a
 			>
 
@@ -28,10 +28,13 @@
 					class="hidden absolute right-0 mt-2 w-48 bg-[#201e43] text-white border border-gray-700 rounded-lg shadow-lg"
 				>
 					<div class="py-1">
-						<a href="cart.html" class="block px-4 py-2 hover:bg-blue-900">
+						<a href="/user/cart.html" class="block px-4 py-2 hover:bg-blue-900">
 							<i class="fas fa-shopping-cart mr-2"></i>Cart
 						</a>
-						<a href="order.html" class="block px-4 py-2 hover:bg-blue-900">
+						<a
+							href="/user/order.html"
+							class="block px-4 py-2 hover:bg-blue-900"
+						>
 							<i class="fas fa-list mr-2"></i>Orders
 						</a>
 						<!-- <a href="#" class="block px-4 py-2 hover:bg-blue-900">
@@ -81,37 +84,35 @@
 				>Home</a
 			>
 			<a
-				href="./services.html"
+				href="/services.html"
 				class="text-white text-xl py-2 border-b border-gray-700"
 				>Services</a
 			>
 			<a
-				href="./products.html"
+				href="/products.html"
 				class="text-white text-xl py-2 border-b border-gray-700"
 				>Products</a
 			>
 			<a
-				href="services.html"
+				href="/about-us.html"
 				class="text-white text-xl py-2 border-b border-gray-700"
 				>About Us</a
 			>
 
 			<div class="flex flex-col space-y-2">
 				<a
-					href="cart.html"
+					href="/user/cart.html"
 					class="text-white text-xl py-2 border-b border-gray-700"
 				>
 					<i class="fas fa-shopping-cart mr-2"></i>Cart
 				</a>
 				<a
-					href="order.html"
+					href="/user/order.html"
 					class="text-white text-xl py-2 border-b border-gray-700"
 				>
 					<i class="fas fa-list mr-2"></i>Orders
 				</a>
-				<a href="#" class="text-white text-xl py-2 border-b border-gray-700">
-					<i class="fas fa-cog mr-2"></i>Settings
-				</a>
+
 				<a href="#" id="mobilLogoutBtn" class="text-white text-xl py-2">
 					<i class="fas fa-sign-out-alt mr-2"></i>Logout
 				</a>
@@ -166,7 +167,6 @@
 		// Clear user authentication
 		localStorage.removeItem("userId");
 		localStorage.removeItem("userEmail");
-		localStorage.removeItem("userRole");
 		localStorage.removeItem("userName");
 
 		// Redirect to login page
