@@ -9,6 +9,7 @@
 			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
 			rel="stylesheet"
 		/>
+		<link rel="stylesheet" href="../design2.css" />
 	</head>
 	<body class="bg-gray-50">
 		<div id="navigationBar"></div>
@@ -61,12 +62,23 @@
 						Continue Shopping
 					</a>
 					<a
-						href="./order.html"
+						href="order.html"
 						class="bg-gray-200 text-gray-800 px-4 py-2 sm:px-6 sm:py-2 rounded-full hover:bg-gray-300 text-sm sm:text-base"
 					>
 						View Orders
 					</a>
 				</div>
+			</div>
+		</div>
+
+		<div class="signupbottom-details">
+			<div class="signupbottom_text bg-[#201e43]">
+				<span class="signupcopyright_text"
+					>&#169; <a href="#">IT Services.</a> All rights reserved 2024</span
+				>
+				<span class="signuppolicy_terms">
+					<a href="#">Terms & Conditions</a>
+				</span>
 			</div>
 		</div>
 
@@ -88,9 +100,13 @@
 
 				try {
 					const numericOrderId = orderId.replace("ORD-", "");
-
+					const url =
+						window.location.hostname === "localhost" ||
+						window.location.hostname === "127.0.0.1"
+							? "http://localhost:3000"
+							: "https://backend-itservice.onrender.com/";
 					const response = await fetch(
-						`http://localhost:3000/api/orders/${numericOrderId}?userId=${userId}`,
+						`${url}/api/orders/${numericOrderId}?userId=${userId}`,
 						{
 							method: "GET",
 							headers: {
@@ -110,7 +126,7 @@
 
 					orderData.items.forEach((item) => {
 						const itemElement = document.createElement("div");
-						const FALLBACK_IMAGE = "/PICTURES/no-image.jpg";
+						const FALLBACK_IMAGE = "../PICTURES/no-image.jpg";
 						const imageUrl = item.image || FALLBACK_IMAGE;
 						itemElement.classList.add(
 							"flex",
@@ -215,6 +231,6 @@
 			// Load components when the page is ready
 			document.addEventListener("DOMContentLoaded", loadComponents);
 		</script>
-		<script src="/script.js"></script>
+		<script src="../script.js"></script>
 	</body>
 </html>

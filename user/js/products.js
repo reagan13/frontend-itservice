@@ -124,7 +124,7 @@ function filterProducts() {
 	if (filteredProducts.length === 0) {
 		productsGrid.innerHTML = `
             <div class="col-span-5 text-center py-10">
-                <h2 class="text-2xl font-bold text-gray-600 mb-4">
+                <h2 class="text-2xl font-bold text-[#201e43] mb-4">
                     No Products Found
                 </h2>
                 <p class="text-gray-500">
@@ -207,7 +207,13 @@ function resetFilters() {
 // Fetch Products from Backend
 async function fetchProducts() {
 	try {
-		const response = await fetch("http://localhost:3000/api/products", {
+		const url =
+			window.location.hostname === "localhost" ||
+			window.location.hostname === "127.0.0.1"
+				? "http://localhost:3000/api/products"
+				: "https://backend-itservice.onrender.com/api/products";
+
+		const response = await fetch(url, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -271,12 +277,19 @@ async function addToCart(productId, quantity = 1) {
 
 	if (!userId) {
 		// Show login prompt
-		showCartMessage("Please log in to add items to cart", false);
+		alert("Please log in to add items to cart");
+		// Redirect to login page
+		window.location.href = "../../auth/sign-in.html";
 		return;
 	}
 
+	const url =
+		window.location.hostname === "localhost" ||
+		window.location.hostname === "127.0.0.1"
+			? "http://localhost:3000/api/cart"
+			: "https://backend-itservice.onrender.com/api/cart";
 	try {
-		const response = await fetch("http://localhost:3000/api/cart", {
+		const response = await fetch(url, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -306,35 +319,10 @@ async function addToCart(productId, quantity = 1) {
 	}
 }
 
-// Create a message display function
-function showCartMessage(message, isSuccess) {
-	// Create message element
-	const messageDiv = document.createElement("div");
-	messageDiv.style.position = "fixed";
-	messageDiv.style.top = "20px";
-	messageDiv.style.left = "50%";
-	messageDiv.style.transform = "translateX(-50%)";
-	messageDiv.style.padding = "15px";
-	messageDiv.style.backgroundColor = isSuccess ? "#4CAF50" : "#f44336";
-	messageDiv.style.color = "white";
-	messageDiv.style.borderRadius = "5px";
-	messageDiv.style.zIndex = "1000";
-	messageDiv.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
-	messageDiv.textContent = message;
-
-	// Add to body
-	document.body.appendChild(messageDiv);
-
-	// Remove after 3 seconds
-	setTimeout(() => {
-		document.body.removeChild(messageDiv);
-	}, 3000);
-}
-
 // Modify the Quick View Modal rendering to include Add to Cart functionality
 function openQuickView(productId) {
 	const product = products.find((p) => p.id === productId);
-	const FALLBACK_IMAGE = "/PICTURES/no-image.jpg";
+	const FALLBACK_IMAGE = "../../PICTURES/no-image.jpg";
 	const imageUrl = product.image || FALLBACK_IMAGE;
 	if (product) {
 		modalContent.innerHTML = `
@@ -342,7 +330,7 @@ function openQuickView(productId) {
                 <img 
                     src="${imageUrl}" 
                     alt="${product.name}" 
-                    class="w-full md:w-1/2 h-auto object-cover rounded-lg border border-black"
+                    class="w-full md:w-1/2 h-auto object-cover rounded-lg "
 					 onerror="
                                 console.error('Image failed to load:', this.src); 
                                 this.onerror=null; 
@@ -356,7 +344,7 @@ function openQuickView(productId) {
                    
                     
                     <div class="flex flex-col md:flex-row justify-between items-center mt-6">
-                        <span class="text-2xl font-bold text-blue-600">
+							<span class="text-2xl font-bold text-[#201e4]">
                             ₱${parseFloat(product.price).toFixed(2)}
                         </span>
                         <div class="flex items-center space-x-2 mt-2 md:mt-0">
@@ -390,31 +378,31 @@ function renderProducts(filteredProducts = products) {
 		console.error("Products grid element not found");
 		return;
 	}
-	const FALLBACK_IMAGE = "/PICTURES/no-image.jpg";
+	const FALLBACK_IMAGE = "../../PICTURES/no-image.jpg";
 
 	productsGrid.innerHTML = filteredProducts
 		.map((product) => {
 			const imageUrl = product.image ? `${product.image}` : FALLBACK_IMAGE;
 			return `
 
-				  <div class="bg-white rounded-lg shadow-md border border-black w-60 flex flex-col">
+				  <div class="bg-white rounded-lg shadow-md w-60 flex flex-col">
                      <img 
                         src="${imageUrl}"
                         alt="${product.name}" 
-                        class="w-full h-48 object-contain border border-blue-500"
+                        class="w-full h-48 object-contain "
 						 onerror="
                                 console.error('Image failed to load:', this.src); 
                                 this.onerror=null; 
                                 this.src='${FALLBACK_IMAGE}'
                             "
                     	>
-                    <div class="p-4 border border-red-500 flex flex-col gap-1  ">
+                    <div class="p-4  flex flex-col gap-1  ">
                         <h3 class="text-lg font-semibold">${product.name}</h3>
                         <p class="text-gray-600 text-sm line-clamp-2 ">${
 													product.description
 												}</p>
 
-                        <span class="text-xl font-bold text-blue-600 ">₱${parseFloat(
+                        <span class="text-xl font-bold text-[#201e4] ">₱${parseFloat(
 													product.price
 												).toFixed(2)}</span>
                         <div class="flex justify-between ">
@@ -443,133 +431,79 @@ async function buyNow(productId) {
 	const product = products.find((p) => p.id === productId);
 	if (!product) {
 		alert("Product not found");
-		return;
+		return false;
 	}
 
-	// Create confirmation modal
-	const confirmationModal = document.createElement("div");
-	confirmationModal.innerHTML = `
-        <div id="confirmationOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-            <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-                <h2 class="text-2xl font-bold mb-4">Confirm Purchase</h2>
-                <div class="flex items-center mb-4">
-                    <img 
-                        src="${product.image}" 
-                        alt="${product.name}" 
-                        class="w-24 h-24 object-cover rounded-md mr-4"
-                    >
-                    <div>
-                        <h3 class="text-lg font-semibold">${product.name}</h3>
-                        <p class="text-gray-600">Price: $${parseFloat(
-													product.price
-												).toFixed(2)}</p>
-                    </div>
-                </div>
-                <p class="mb-4 text-gray-700">Are you sure you want to purchase this item?</p>
-                <div class="flex justify-between">
-                    <button id="cancelPurchase" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
-                        Cancel
-                    </button>
-                    <button id="confirmPurchase" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                        Confirm Purchase
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
+	// Use confirm dialog
+	const isConfirmed = confirm(`
+Confirm Purchase:
+Product: ${product.name}
+Price: $${parseFloat(product.price).toFixed(2)}
 
-	// Append modal to body
-	document.body.appendChild(confirmationModal);
+Are you sure you want to purchase this item?
+`);
 
-	// Get modal elements
-	const overlay = document.getElementById("confirmationOverlay");
-	const cancelButton = document.getElementById("cancelPurchase");
-	const confirmButton = document.getElementById("confirmPurchase");
+	// If user cancels
+	if (!isConfirmed) {
+		alert("Purchase cancelled.");
+		return false;
+	}
 
-	// Create a promise to handle user's choice
-	const userChoice = new Promise((resolve, reject) => {
-		// Cancel button handler
-		cancelButton.addEventListener("click", () => {
-			overlay.remove();
-			resolve(false);
+	try {
+		// Get user ID from localStorage
+		const userId = localStorage.getItem("userId");
+		if (!userId) {
+			alert("Please log in to make a purchase");
+			return false;
+		}
+
+		// Prepare order data
+		const orderData = {
+			userId: parseInt(userId),
+			productId: product.id,
+			quantity: 1, // Default to 1, can be modified if you want to support quantity selection
+		};
+		const url =
+			window.location.hostname === "localhost" ||
+			window.location.hostname === "127.0.0.1"
+				? "http://localhost:3000/api/single-order"
+				: "https://backend-itservice.onrender.com/api/single-order";
+
+		// Send order to backend
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(orderData),
 		});
 
-		// Confirm button handler
-		confirmButton.addEventListener("click", async () => {
-			// Disable confirm button to prevent multiple clicks
-			confirmButton.disabled = true;
-			confirmButton.textContent = "Processing...";
+		// Check response
+		if (!response.ok) {
+			const errorText = await response.text();
+			throw new Error(`Order creation failed: ${response.status} ${errorText}`);
+		}
 
-			try {
-				// Get user ID from localStorage
-				const userId = localStorage.getItem("userId");
-				if (!userId) {
-					throw new Error("User not logged in");
-				}
+		// Process successful order
+		const orderConfirmation = await response.json();
 
-				// Prepare order data
-				const orderData = {
-					userId: parseInt(userId),
-					productId: product.id,
-					quantity: 1, // Default to 1, can be modified if you want to support quantity selection
-				};
+		console.log("Order created successfully:", orderConfirmation);
 
-				// Send order to backend
-				const response = await fetch("http://localhost:3000/api/single-order", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(orderData),
-				});
+		// Show success message
+		alert(`Purchase successful! Order ID: ${orderConfirmation.id}`);
 
-				// Check response
-				if (!response.ok) {
-					const errorText = await response.text();
-					throw new Error(
-						`Order creation failed: ${response.status} ${errorText}`
-					);
-				}
+		// Redirect to order confirmation page
+		window.location.href = `/user/order-confirmation.html?orderId=${orderConfirmation.id}`;
 
-				// Process successful order
-				const orderConfirmation = await response.json();
-				console.log("Order created successfully:", orderConfirmation);
+		return true;
+	} catch (error) {
+		console.error("Buy Now Error:", error);
 
-				// Remove overlay
-				overlay.remove();
+		// Show error to user
+		alert(`Purchase failed: ${error.message}`);
 
-				// Redirect to order confirmation page
-				window.location.href = `order-confirmation.html?orderId=${orderConfirmation.id}`;
-
-				resolve(true);
-			} catch (error) {
-				console.error("Buy Now Error:", error);
-
-				// Show error in modal
-				const errorDiv = document.createElement("div");
-				errorDiv.className = "text-red-500 mt-4 text-center";
-				errorDiv.textContent = `Error: ${error.message}`;
-				overlay.querySelector(".bg-white").appendChild(errorDiv);
-
-				// Re-enable confirm button
-				confirmButton.disabled = false;
-				confirmButton.textContent = "Confirm Purchase";
-
-				resolve(false);
-			}
-		});
-
-		// Allow closing modal by clicking outside
-		overlay.addEventListener("click", (e) => {
-			if (e.target === overlay) {
-				overlay.remove();
-				resolve(false);
-			}
-		});
-	});
-
-	// Wait for user's choice
-	return userChoice;
+		return false;
+	}
 }
 // Initialize the application
 function init() {

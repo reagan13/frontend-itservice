@@ -2,7 +2,6 @@ class CartManager {
 	constructor() {
 		this.userId = null;
 		this.cartItems = [];
-		this.apiBaseUrl = "http://localhost:3000/api";
 	}
 
 	async fetchCartDetails() {
@@ -10,13 +9,18 @@ class CartManager {
 			const storedUserId = localStorage.getItem("userId");
 			if (!storedUserId) {
 				console.error("No user ID found");
-				this.showCartMessage("Please log in to view your cart", false);
+				alert("User not found. Please log in again.");
 				return [];
 			}
 
 			this.userId = storedUserId;
+			const url =
+				window.location.hostname === "localhost" ||
+				window.location.hostname === "127.0.0.1"
+					? "http://localhost:3000/api"
+					: "https://backend-itservice.onrender.com/api";
 
-			const response = await fetch(`${this.apiBaseUrl}/cart/${this.userId}`, {
+			const response = await fetch(`${url}/cart/${this.userId}`, {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
@@ -34,7 +38,7 @@ class CartManager {
 			return this.cartItems;
 		} catch (error) {
 			console.error("Error fetching cart details:", error);
-			this.showCartMessage("Failed to load cart. Please try again.", false);
+			alert("Failed to load cart items");
 			return [];
 		}
 	}
@@ -135,7 +139,7 @@ class CartManager {
 		const productId = groupedItem.product_id || "unknown";
 		const name = groupedItem.name || "Unnamed Product";
 
-		const FALLBACK_IMAGE = "/PICTURES/no-image.jpg";
+		const FALLBACK_IMAGE = "../../PICTURES/no-image.jpg";
 		const imageUrl = groupedItem.image || FALLBACK_IMAGE;
 
 		const itemElement = document.createElement("div");
@@ -281,158 +285,49 @@ class CartManager {
 	}
 
 	async removeCartItem(productId) {
-		// Create a custom confirmation dialog
-		const confirmRemove = await this.showConfirmationDialog(
-			"Remove Item",
-			"Are you sure you want to remove this item from your cart?"
+		// Use native confirm dialog
+		const confirmRemove = confirm(
+			"Remove Item\n\nAre you sure you want to remove this item from your cart?"
 		);
+		const url =
+			window.location.hostname === "localhost" ||
+			window.location.hostname === "127.0.0.1"
+				? "http://localhost:3000/api"
+				: "https://backend-itservice.onrender.com/api";
 
 		if (confirmRemove) {
 			try {
-				const response = await fetch(
-					`${this.apiBaseUrl}/cart/remove`, // Correct endpoint
-					{
-						method: "DELETE",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({
-							userId: this.userId,
-							productId,
-						}),
-					}
-				);
+				const response = await fetch(`${url}/cart/remove`, {
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						userId: this.userId,
+						productId,
+					}),
+				});
+
 				if (!response.ok) {
-					alert("Failed to remove item from cart");
 					throw new Error("Failed to remove item from cart");
 				}
 
 				const data = await response.json();
-				alert("Item removed from cart:", data.message);
-				console.log("Item removed from cart:", data.message);
-			} catch (error) {
-				alert("Failed to remove item from cart");
-				console.error("Error removing item from cart:", error);
-			}
-		}
-	}
-	async removeCartItem(productId) {
-		// Create a custom confirmation dialog
-		const confirmRemove = await this.showConfirmationDialog(
-			"Remove Item",
-			"Are you sure you want to remove this item from your cart?"
-		);
 
-		if (confirmRemove) {
-			try {
-				const response = await fetch(
-					`${this.apiBaseUrl}/cart/remove`, // Correct endpoint
-					{
-						method: "DELETE",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({
-							userId: this.userId,
-							productId,
-						}),
-					}
-				);
-
-				if (!response.ok) {
-					alert("Failed to remove item from cart");
-					throw new Error("Failed to remove item from cart");
-				}
-
-				const data = await response.json();
-				console.log("Item removed from cart:", data.message);
-				alert("Item removed from cart");
-				// Custom success alert
-				// this.showSuccessAlert("Item removed from cart successfully!");
-
+				// Use alert for success message
+				alert(`Item removed from cart: ${data.message}`);
 				window.location.reload();
+				console.log("Item removed from cart:", data.message);
+
+				// Optional: Refresh cart or update UI
+				// this.updateCartDisplay();
 			} catch (error) {
 				alert("Failed to remove item from cart");
 				console.error("Error removing item from cart:", error);
-				// this.showErrorAlert("Failed to remove item from cart");
 			}
 		}
 	}
 
-	// Add these methods to your CartManager class
-	showSuccessAlert(message) {
-		const alertContainer = document.createElement("div");
-		alertContainer.classList.add(
-			"fixed",
-			"top-4",
-			"left-1/2",
-			"transform",
-			"-translate-x-1/2",
-			"bg-green-500",
-			"text-white",
-			"px-6",
-			"py-4",
-			"rounded-lg",
-			"shadow-lg",
-			"z-50",
-			"transition-all",
-			"duration-300"
-		);
-		alertContainer.textContent = message;
-
-		document.body.appendChild(alertContainer);
-
-		// Animate in
-		setTimeout(() => {
-			alertContainer.classList.add("opacity-100", "translate-y-0");
-		}, 10);
-
-		// Remove after 3 seconds
-		setTimeout(() => {
-			alertContainer.classList.add("opacity-0", "-translate-y-full");
-			setTimeout(() => {
-				document.body.removeChild(alertContainer);
-			}, 300);
-		}, 1500);
-	}
-
-	showErrorAlert(message) {
-		const alertContainer = document.createElement("div");
-		alertContainer.classList.add(
-			"fixed",
-			"top-4",
-			"left-1/2",
-			"transform",
-			"-translate-x-1/2",
-			"bg-red-500",
-			"text-white",
-			"px-6",
-			"py-4",
-			"rounded-lg",
-			"shadow-lg",
-			"z-50",
-			"transition-all",
-			"duration-300",
-			"opacity-0",
-			"-translate-y-full"
-		);
-		alertContainer.textContent = message;
-
-		document.body.appendChild(alertContainer);
-
-		// Animate in
-		setTimeout(() => {
-			alertContainer.classList.add("opacity-100", "translate-y-0");
-		}, 10);
-
-		// Remove after 3 seconds
-		setTimeout(() => {
-			alertContainer.classList.add("opacity-0", "-translate-y-full");
-			setTimeout(() => {
-				document.body.removeChild(alertContainer);
-			}, 300);
-		}, 1500);
-	}
 	// In attachCartEventListeners method
 	attachCartEventListeners() {
 		// Existing code...
@@ -449,122 +344,17 @@ class CartManager {
 			});
 		});
 	}
-	// New method to create a custom confirmation dialog
-	showConfirmationDialog(title, message) {
-		return new Promise((resolve) => {
-			// Create dialog container
-			const dialogOverlay = document.createElement("div");
-			dialogOverlay.classList.add(
-				"fixed",
-				"inset-0",
-				"bg-black",
-				"bg-opacity-50",
-				"flex",
-				"items-center",
-				"justify-center",
-				"z-50"
-			);
 
-			// Create dialog content
-			const dialogContent = document.createElement("div");
-			dialogContent.classList.add(
-				"bg-white",
-				"rounded-lg",
-				"p-6",
-				"max-w-md",
-				"w-full",
-				"mx-4"
-			);
-			dialogContent.innerHTML = `
-            <h2 class="text-xl font-bold mb-4">${title}</h2>
-            <p class="mb-6">${message}</p>
-            <div class="flex justify-end space-x-4">
-                <button id="cancelBtn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
-                    Cancel
-                </button>
-                <button id="confirmBtn" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-                    Remove
-                </button>
-            </div>
-        `;
-
-			// Add to overlay
-			dialogOverlay.appendChild(dialogContent);
-
-			// Add to body
-			document.body.appendChild(dialogOverlay);
-
-			// Get buttons
-			const confirmBtn = dialogOverlay.querySelector("#confirmBtn");
-			const cancelBtn = dialogOverlay.querySelector("#cancelBtn");
-
-			// Add event listeners
-			confirmBtn.addEventListener("click", () => {
-				document.body.removeChild(dialogOverlay);
-				resolve(true);
-			});
-
-			cancelBtn.addEventListener("click", () => {
-				document.body.removeChild(dialogOverlay);
-				resolve(false);
-			});
-		});
-	}
-
-	// Update showCartMessage method to be more flexible
-	showCartMessage(message, isSuccess = true) {
-		// Create message container if it doesn't exist
-		let messageContainer = document.querySelector("#cartMessage");
-		if (!messageContainer) {
-			messageContainer = document.createElement("div");
-			messageContainer.id = "cartMessage";
-			messageContainer.classList.add(
-				"fixed",
-				"top-4",
-				"left-1/2",
-				"transform",
-				"-translate-x-1/2",
-				"px-4",
-				"py-2",
-				"rounded",
-				"shadow-lg",
-				"z-50",
-				"transition-all",
-				"duration-300"
-			);
-			document.body.appendChild(messageContainer);
-		}
-
-		// Set message and styling
-		messageContainer.textContent = message;
-		messageContainer.classList.remove(
-			"bg-green-500",
-			"bg-red-500",
-			"text-white"
-		);
-
-		if (isSuccess) {
-			messageContainer.classList.add("bg-green-500", "text-white");
-		} else {
-			messageContainer.classList.add("bg-red-500", "text-white");
-		}
-
-		// Show message
-		messageContainer.classList.remove("opacity-0", "-top-10");
-		messageContainer.classList.add("opacity-100", "top-4");
-
-		// Automatically hide after 3 seconds
-		setTimeout(() => {
-			messageContainer.classList.remove("opacity-100", "top-4");
-			messageContainer.classList.add("opacity-0", "-top-10");
-		}, 3000);
-	}
 	async proceedToCheckout() {
 		try {
+			const url =
+				window.location.hostname === "localhost" ||
+				window.location.hostname === "127.0.0.1"
+					? "http://localhost:3000/api"
+					: "https://backend-itservice.onrender.com/api";
+
 			// Fetch current cart items
-			const cartResponse = await fetch(
-				`${this.apiBaseUrl}/cart/${this.userId}`
-			);
+			const cartResponse = await fetch(`${url}/cart/${this.userId}`);
 			if (!cartResponse.ok) {
 				throw new Error("Failed to fetch cart items");
 			}
@@ -590,7 +380,7 @@ class CartManager {
 			};
 
 			// Place order
-			const orderResponse = await fetch(`${this.apiBaseUrl}/orders/place`, {
+			const orderResponse = await fetch(`${url}/orders/place`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -609,8 +399,9 @@ class CartManager {
 			alert("Order placed successfully!");
 			// Show success message and redirect
 			// this.showSuccessMessage("Order placed successfully!");
+			alert(`Order ID: ${orderResult.orderId}`);
 
-			window.location.href = `./order-confirmation.html?orderId=${orderResult.orderId}`;
+			window.location.href = `../order-confirmation.html?orderId=${orderResult.orderId}`;
 		} catch (error) {
 			console.error("Checkout Error:", error);
 			alert("Failed to proceed to checkout");
@@ -618,70 +409,11 @@ class CartManager {
 		}
 	}
 
-	showSuccessMessage(message) {
-		const messageContainer = document.createElement("div");
-		messageContainer.classList.add(
-			"fixed",
-			"top-4",
-			"left-1/2",
-			"transform",
-			"-translate-x-1/2",
-			"bg-green-500",
-			"text-white",
-			"px-6",
-			"py-4",
-			"rounded-lg",
-			"shadow-lg",
-			"z-50",
-			"transition-all",
-			"duration-300"
-		);
-		messageContainer.textContent = message;
-		document.body.appendChild(messageContainer);
-
-		// Animate and remove
-		setTimeout(() => {
-			messageContainer.classList.add("opacity-0");
-			setTimeout(() => {
-				document.body.removeChild(messageContainer);
-			}, 300);
-		}, 2000);
-	}
-
-	showErrorMessage(message) {
-		const messageContainer = document.createElement("div");
-		messageContainer.classList.add(
-			"fixed",
-			"top-4",
-			"left-1/2",
-			"transform",
-			"-translate-x-1/2",
-			"bg-red-500",
-			"text-white",
-			"px-6",
-			"py-4",
-			"rounded-lg",
-			"shadow-lg",
-			"z-50",
-			"transition-all",
-			"duration-300"
-		);
-		messageContainer.textContent = message;
-		document.body.appendChild(messageContainer);
-
-		// Animate and remove
-		setTimeout(() => {
-			messageContainer.classList.add("opacity-0");
-			setTimeout(() => {
-				document.body.removeChild(messageContainer);
-			}, 300);
-		}, 2000);
-	}
 	createCartItemElement(item) {
 		const price = Number(item.price || 0);
 		const productId = item.product_id || "unknown";
 		const name = item.name || "Unnamed Product";
-		const FALLBACK_IMAGE = "/PICTURES/no-image.jpg";
+		const FALLBACK_IMAGE = "../../PICTURES/no-image.jpg";
 		const imageUrl = item.image ? `${item.image}` : FALLBACK_IMAGE;
 		// Calculate total quantity for this product
 		const totalQuantity = this.cartItems
@@ -762,7 +494,12 @@ class CartManager {
 	}
 	async updateCartItemQuantity(productId, quantity) {
 		try {
-			const response = await fetch(`${this.apiBaseUrl}/cart/update-quantity`, {
+			const url =
+				window.location.hostname === "localhost" ||
+				window.location.hostname === "127.0.0.1"
+					? "http://localhost:3000/api"
+					: "https://backend-itservice.onrender.com/api";
+			const response = await fetch(`${url}/cart/update-quantity`, {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
@@ -788,9 +525,7 @@ class CartManager {
 			await this.renderCart();
 		} catch (error) {
 			console.error("Error updating cart item quantity:", error);
-			this.showErrorAlert(
-				error.message || "Failed to update cart item quantity"
-			);
+			alert("Failed to update cart item quantity");
 		}
 	}
 
