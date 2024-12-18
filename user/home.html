@@ -9,6 +9,7 @@
 			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
 			rel="stylesheet"
 		/>
+		<link rel="stylesheet" href="/design2.css" />
 		<style>
 			/* Optional: Add some basic styling for component loading */
 			.component-loading {
@@ -23,14 +24,63 @@
 			}
 		</style>
 	</head>
-	<body class="bg-white text-gray-900 font-sans">
+	<body class="bg-white text-gray-900">
 		<!-- Component Containers -->
 		<div id="navigationBar"></div>
-		<div id="hero-section"></div>
+
+		<section class="bg-[#201e43] text-white min-h-screen flex items-center">
+			<div
+				class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between"
+			>
+				<div class="md:w-1/2 mb-10 md:mb-0">
+					<h2 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+						Kung Libog Na, Patabang Na!
+					</h2>
+					<p class="text-base md:text-xl text-gray-300 mb-8 text-justify">
+						This Business is both a "helping hand" & A "Support System"
+						essentially for those Aspiring IT Students. To counsel, guide, and
+						support them with their growing passion and abilities.
+					</p>
+					<div class="flex justify-center md:justify-start space-x-4">
+						<a
+							href="products.html"
+							class="bg-blue-600 text-white px-6 md:px-8 py-2 md:py-3 rounded-full hover:bg-blue-700"
+						>
+							Explore Products
+						</a>
+						<a
+							href="services.html"
+							class="border-2 border-blue-600 bg-white text-[#201e43] px-6 md:px-8 py-2 md:py-3 rounded-full hover:bg-blue-50"
+						>
+							Our Services
+						</a>
+					</div>
+				</div>
+
+				<div class="md:w-1/2 flex justify-center">
+					<img
+						src="/PICTURES/Class2.png"
+						alt="Class Image"
+						class="w-full max-w-[500px] object-cover transform hover:scale-105 transition duration-300"
+					/>
+				</div>
+			</div>
+		</section>
+		<!-- <div id="hero-section"></div> -->
 		<div id="home-products"></div>
 		<div id="home-services"></div>
+		<div id="home-values"></div>
 
-		<div id="footer"></div>
+		<div class="signupbottom-details">
+			<div class="signupbottom_text bg-[#201e43]">
+				<span class="signupcopyright_text"
+					>&#169; <a href="#">IT Services.</a> All rights reserved 2024</span
+				>
+				<span class="signuppolicy_terms">
+					<a href="#">Terms & Conditions</a>
+				</span>
+			</div>
+		</div>
 
 		<script>
 			// Comprehensive Component Loading Utility
@@ -43,11 +93,6 @@
 						optional: false,
 					},
 					{
-						id: "hero-section",
-						path: "/components/hero-section.html",
-						optional: false,
-					},
-					{
 						id: "home-products",
 						path: "/components/home-products.html",
 						optional: false,
@@ -55,16 +100,12 @@
 					{
 						id: "home-services",
 						path: "/components/home-services.html",
-						optional: true,
+						optional: false,
 					},
+
 					{
-						id: "home-testimonial",
-						path: "/components/home-testimonial.html",
-						optional: true,
-					},
-					{
-						id: "footer",
-						path: "/components/footer.html",
+						id: "home-values",
+						path: "/components/home-values.html",
 						optional: false,
 					},
 				],
