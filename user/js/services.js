@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             ${serv.description}
                         </p>
                         
-                        <button data-service-index="${index}" class="book-service-btn w-full bg-blue-500 text-white py-3 rounded-lg text-base font-semibold hover:bg-blue-600 transition-colors">
+                        <button data-service-index="${index}" class="book-service-btn w-full bg-[#201e43] text-white py-3 rounded-lg text-base font-semibold hover:bg-blue-600 transition-colors">
                             Book Service
                         </button>
                     </div>
@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					.join("");
 
 				modalContent.innerHTML = `
-                <h2 class="text-3xl font-bold text-blue-600 mb-4">${service.title}</h2>
+                <h2 class="text-3xl font-bold text-[#201e43] mb-4">${service.title}</h2>
                 <p class="text-gray-600 mb-6">${service.description}</p>
                 <div class="grid md:grid-cols-2 gap-4">
                     ${servicesHTML}
