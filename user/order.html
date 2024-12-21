@@ -34,17 +34,15 @@
 			</div>
 
 			<!-- Loading Indicator -->
-			<div
-				id="loadingIndicator"
-				class="flex justify-center items-center py-12 hidden"
-			>
-				<div
-					class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"
-				></div>
+			<div id="loadingIndicator" class="flex justify-center items-center">
+				<div class=""></div>
 			</div>
 
 			<!-- Order List -->
-			<div id="orderListContainer" class="space-y-4 sm:space-y-6">
+			<div
+				id="orderListContainer"
+				class="space-y-4 sm:space-y-6 h-full overflow-y-auto pb-24"
+			>
 				<!-- Orders will be dynamically inserted here -->
 			</div>
 
@@ -289,7 +287,7 @@
 						const url =
 							window.location.hostname === "localhost" ||
 							window.location.hostname === "127.0.0.1"
-								? "http://localhost:3000/api"
+								? "http://localhost:3000"
 								: "https://backend-itservice.onrender.com";
 
 						// Update this line to use full backend URL

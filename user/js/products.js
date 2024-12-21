@@ -440,7 +440,7 @@ async function buyNow(productId) {
 	const isConfirmed = confirm(`
 Confirm Purchase:
 Product: ${product.name}
-Price: $${parseFloat(product.price).toFixed(2)}
+Price: ₱${parseFloat(product.price).toFixed(2)}
 
 Are you sure you want to purchase this item?
 `);

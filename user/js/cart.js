@@ -57,7 +57,7 @@ class CartManager {
 
 			if (cartItems.length === 0) {
 				cartContainer.innerHTML = `
-                    <div class="text-center text-gray-500 py-10 border border-black">
+                    <div class="text-center text-gray-500 py-10">
                         <p class="text-xl">Your cart is empty</p>
                         <a href="products.html" class="text-blue-600 hover:underline mt-4 inline-block">
                             Continue Shopping
@@ -401,7 +401,7 @@ class CartManager {
 			// this.showSuccessMessage("Order placed successfully!");
 			alert(`Order ID: ${orderResult.orderId}`);
 
-			window.location.href = `../order-confirmation.html?orderId=${orderResult.orderId}`;
+			window.location.href = `order-confirmation.html?orderId=${orderResult.orderId}`;
 		} catch (error) {
 			console.error("Checkout Error:", error);
 			alert("Failed to proceed to checkout");
@@ -561,7 +561,7 @@ class CartManager {
 						.querySelector(".subtotal-display");
 
 					const newSubtotal = price * newQuantity;
-					subtotalDisplay.textContent = `Subtotal: $${newSubtotal.toFixed(2)}`;
+					subtotalDisplay.textContent = `Subtotal: ₱${newSubtotal.toFixed(2)}`;
 
 					// Update backend
 					this.updateCartItemQuantity(productId, newQuantity);
