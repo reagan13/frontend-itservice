@@ -48,33 +48,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Filter Products
+// Update filterProducts function to work with select
 function filterProducts() {
 	// Get search term
 	const searchTerm = searchInput.value.trim().toLowerCase();
 
-	// Get selected categories
-	const selectedCategories = Array.from(
-		document.querySelectorAll('input[type="checkbox"]:checked')
-	).map((cb) => cb.value);
-
-	// Get price range
-	const minPrice = parseFloat(document.getElementById("minPrice").value) || 0;
-	const maxPrice =
-		parseFloat(document.getElementById("maxPrice").value) || Infinity;
-
-	// Get selected price range radio (if any)
-	const selectedPriceRange = document.querySelector(
-		'input[name="priceRange"]:checked'
-	);
+	// Get selected category
+	const categoryFilter = document.getElementById("categoryFilter");
+	const selectedCategory = categoryFilter.value.toLowerCase();
 
 	// If everything is reset, show all products
-	if (
-		searchTerm === "" &&
-		selectedCategories.length === 0 &&
-		minPrice === 0 &&
-		maxPrice === Infinity &&
-		!selectedPriceRange
-	) {
+	if (searchTerm === "" && selectedCategory === "") {
 		renderProducts(products);
 		return;
 	}
@@ -89,35 +73,10 @@ function filterProducts() {
 
 		// Category filter
 		const matchesCategory =
-			selectedCategories.length === 0 ||
-			selectedCategories.includes(product.category);
+			selectedCategory === "" ||
+			product.category.toLowerCase() === selectedCategory;
 
-		// Price filter
-		const productPrice = parseFloat(product.price);
-		let matchesPrice = true;
-
-		// Check price range radio first
-		if (selectedPriceRange) {
-			switch (selectedPriceRange.value) {
-				case "0-100":
-					matchesPrice = productPrice >= 0 && productPrice <= 100;
-					break;
-				case "100-500":
-					matchesPrice = productPrice >= 100 && productPrice <= 500;
-					break;
-				case "500-1000":
-					matchesPrice = productPrice >= 500 && productPrice <= 1000;
-					break;
-				case "1000+":
-					matchesPrice = productPrice > 1000;
-					break;
-			}
-		} else {
-			// If no radio selected, use min/max price inputs
-			matchesPrice = productPrice >= minPrice && productPrice <= maxPrice;
-		}
-
-		return matchesSearch && matchesCategory && matchesPrice;
+		return matchesSearch && matchesCategory;
 	});
 
 	// Render results
@@ -137,6 +96,18 @@ function filterProducts() {
 	}
 }
 
+// Modify resetFilters to handle select reset
+function resetFilters() {
+	// Clear search input
+	searchInput.value = "";
+
+	// Reset category filter to default
+	const categoryFilter = document.getElementById("categoryFilter");
+	categoryFilter.selectedIndex = 0;
+
+	// Render all products
+	renderProducts(products);
+}
 // Setup Filter Listeners
 function setupFilterListeners() {
 	// Checkbox category filters
@@ -508,9 +479,11 @@ Are you sure you want to purchase this item?
 	}
 }
 // Initialize the application
+// Modify init function
 function init() {
 	fetchProducts()
 		.then(() => {
+			populateCategories();
 			setupFilterListeners();
 		})
 		.catch((error) => {
@@ -520,3 +493,46 @@ function init() {
 
 // Call init when the page loads
 document.addEventListener("DOMContentLoaded", init);
+
+// Function to fetch and populate categories
+async function populateCategories() {
+	try {
+		const url =
+			window.location.hostname === "localhost" ||
+			window.location.hostname === "127.0.0.1"
+				? "http://localhost:3000/api/products"
+				: "https://backend-itservice.onrender.com/api/products";
+
+		const response = await fetch(url);
+
+		if (!response.ok) {
+			throw new Error("Failed to fetch products");
+		}
+
+		const rawProducts = await response.json();
+
+		// Get unique categories
+		const categories = [
+			...new Set(rawProducts.map((product) => product.category)),
+		];
+
+		// Populate category select
+		const categorySelect = document.getElementById("categoryFilter");
+
+		// Clear existing options except the first "All Categories"
+		categorySelect.innerHTML = '<option value="">All Categories</option>';
+
+		// Add categories dynamically
+		categories.forEach((category) => {
+			const option = document.createElement("option");
+			option.value = category.toLowerCase();
+			option.textContent = category;
+			categorySelect.appendChild(option);
+		});
+
+		// Add event listener for filtering
+		categorySelect.addEventListener("change", filterProducts);
+	} catch (error) {
+		console.error("Error populating categories:", error);
+	}
+}

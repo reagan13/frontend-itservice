@@ -174,65 +174,15 @@
 				</div>
 
 				<!-- Categories Dropdown -->
-				<div class="relative">
-					<button
-						id="categoriesDropdownBtn"
-						class="flex items-center border rounded px-3 py-2 hover:bg-gray-100"
-					>
-						Categories
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-4 w-4 ml-2"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M19 9l-7 7-7-7"
-							/>
-						</svg>
-					</button>
-					<div
-						id="categoriesDropdown"
-						class="absolute z-10 hidden bg-white border rounded shadow-lg p-3 w-48 right-0 mt-2"
-					>
-						<div class="space-y-2">
-							<div class="flex items-center">
-								<input
-									type="checkbox"
-									id="laptops"
-									class="mr-2"
-									value="Laptops"
-								/>
-								<label for="laptops">Laptops</label>
-							</div>
-							<div class="flex items-center">
-								<input
-									type="checkbox"
-									id="smartphones"
-									class="mr-2"
-									value="Smartphones"
-								/>
-								<label for="smartphones">Smartphones</label>
-							</div>
-							<div class="flex items-center">
-								<input
-									type="checkbox"
-									id="accessories"
-									class="mr-2"
-									value="Accessories"
-								/>
-								<label for="accessories">Accessories</label>
-							</div>
-						</div>
-					</div>
-				</div>
+				<!-- Categories Filter -->
+
+				<select id="categoryFilter" class="border rounded px-4 py-2">
+					<option value="">All Categories</option>
+					<!-- Categories will be dynamically populated here -->
+				</select>
 
 				<!-- Price Range -->
-				<div class="flex items-center space-x-2">
+				<!-- <div class="flex items-center space-x-2">
 					<span>Price:</span>
 					<input
 						type="number"
@@ -247,10 +197,10 @@
 						placeholder="Max"
 						class="w-20 border rounded px-2 py-2"
 					/>
-				</div>
+				</div> -->
 
 				<!-- Quick Ranges Dropdown -->
-				<div class="relative">
+				<!-- <div class="relative">
 					<button
 						id="priceRangeDropdownBtn"
 						class="flex items-center border rounded px-3 py-2 hover:bg-gray-100"
@@ -318,7 +268,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 

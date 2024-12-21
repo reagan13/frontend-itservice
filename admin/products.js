@@ -282,6 +282,7 @@ async function openEditModal(productId) {
 	}
 }
 // Search and Filter Function
+// Updated Search and Filter Function
 function filterProducts() {
 	const searchInput = document.getElementById("searchInput");
 	const categoryFilter = document.getElementById("categoryFilter");
@@ -289,12 +290,19 @@ function filterProducts() {
 	const searchTerm = searchInput.value.toLowerCase();
 	const categoryTerm = categoryFilter.value.toLowerCase();
 
-	fetch("/api/products")
+	fetch(
+		window.location.hostname === "localhost" ||
+			window.location.hostname === "127.0.0.1"
+			? "http://localhost:3000/api/products"
+			: "https://backend-itservice.onrender.com/api/products"
+	)
 		.then((response) => response.json())
 		.then((products) => {
 			const filteredProducts = products.filter(
 				(product) =>
+					// Search by name
 					product.name.toLowerCase().includes(searchTerm) &&
+					// Filter by category (if selected)
 					(categoryTerm === "" ||
 						product.category.toLowerCase() === categoryTerm)
 			);
@@ -307,24 +315,29 @@ function filterProducts() {
 		});
 }
 
-// Logout Function
-function logout() {
-	const confirmLogout = confirm("Are you sure you want to log out?");
-	if (confirmLogout) {
-		// Implement logout logic (e.g., clear token, redirect)
-		window.location.href = "../auth/sign-in.html";
-	}
-}
+// // Logout Function
+// function logout() {
+// 	const confirmLogout = confirm("Are you sure you want to log out?");
+// 	if (confirmLogout) {
+// 		// Implement logout logic (e.g., clear token, redirect)
+// 		window.location.href = "../auth/sign-in.html";
+// 	}
+// }
 
 // Event Listeners
+// Modify the DOMContentLoaded event listener
 document.addEventListener("DOMContentLoaded", () => {
 	const searchInput = document.getElementById("searchInput");
 	const categoryFilter = document.getElementById("categoryFilter");
-	const logoutBtn = document.getElementById("logoutBtn");
+	// const logoutBtn = document.getElementById("logoutBtn");
+
+	// Populate categories before adding event listeners
+	populateCategories();
 
 	searchInput.addEventListener("input", filterProducts);
 	categoryFilter.addEventListener("change", filterProducts);
-	logoutBtn.addEventListener("click", logout);
+	// logoutBtn.addEventListener("click", logout);
+
 	// Add Product Form Submission
 	const addProductForm = document.getElementById("addProductForm");
 	if (addProductForm) {
@@ -336,6 +349,46 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (editProductForm) {
 		editProductForm.addEventListener("submit", handleEditProduct);
 	}
+
 	// Initial fetch of products
 	fetchProducts();
 });
+// Function to fetch and populate categories
+async function populateCategories() {
+	try {
+		const url =
+			window.location.hostname === "localhost" ||
+			window.location.hostname === "127.0.0.1"
+				? "http://localhost:3000/api/products"
+				: "https://backend-itservice.onrender.com/api/products";
+
+		const response = await fetch(url);
+
+		if (!response.ok) {
+			throw new Error("Failed to fetch products");
+		}
+
+		const products = await response.json();
+
+		// Get unique categories
+		const categories = [
+			...new Set(products.map((product) => product.category)),
+		];
+
+		// Populate category filter dropdown
+		const categoryFilter = document.getElementById("categoryFilter");
+
+		// Clear existing options except the first "All Categories"
+		categoryFilter.innerHTML = '<option value="">All Categories</option>';
+
+		// Add categories dynamically
+		categories.forEach((category) => {
+			const option = document.createElement("option");
+			option.value = category.toLowerCase();
+			option.textContent = category;
+			categoryFilter.appendChild(option);
+		});
+	} catch (error) {
+		console.error("Error populating categories:", error);
+	}
+}
