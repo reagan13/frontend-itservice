@@ -466,7 +466,7 @@ Are you sure you want to purchase this item?
 		alert(`Purchase successful! Order ID: ${orderConfirmation.id}`);
 
 		// Redirect to order confirmation page
-		window.location.href = `./user/order-confirmation.html?orderId=${orderConfirmation.id}`;
+		window.location.href = `order-confirmation.html?orderId=${orderConfirmation.id}`;
 
 		return true;
 	} catch (error) {
