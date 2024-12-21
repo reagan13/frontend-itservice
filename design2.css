@@ -207,7 +207,7 @@ footer {
 	position: relative;
 }
 
-footer::before {
+/* footer::before {
 	content: "";
 	position: absolute;
 	left: 5%;
@@ -216,7 +216,7 @@ footer::before {
 	width: 90%;
 	background: #508c9b;
 	color: white;
-}
+} */
 
 footer .content {
 	max-width: 1250px;
