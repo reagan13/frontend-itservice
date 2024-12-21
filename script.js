@@ -6,12 +6,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		// Define pages that don't require authentication
 		const publicPages = [
-			"/auth/sign-in.html",
-			"/auth/sign-up.html",
+			"auth/sign-in.html",
+			"auth/sign-up.html",
 			"index.html",
-			"/services.html",
-			"/about-us.html",
-			"/contact-us.html",
+			"services.html",
+			"about-us.html",
+			"contact-us.html",
 		];
 
 		// Get current page path
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			if (!publicPages.some((page) => currentPath.includes(page))) {
 				alert("You need to login to access this page");
 				if (!currentPath.includes("auth/sign-in.html")) {
-					window.location.href = "auth/sign-in.html";
+					window.location.href = "../auth/sign-in.html";
 					return;
 				}
 			}
