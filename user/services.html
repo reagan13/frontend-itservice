@@ -13,7 +13,75 @@
 	</head>
 	<body class="bg-white text-gray-900 font-sans">
 		<!-- Components -->
-		<div id="navigationBar"></div>
+		<nav class="sticky w-full top-0 fixed z-50 shadow-sm border bg-[#201e43]">
+			<div
+				class="px-5 sm:mx-auto lg:px-10 py-4 flex justify-between items-center"
+			>
+				<div class="flex items-center space-x-4">
+					<img
+						src="../PICTURES/Logo.png"
+						alt="Logo"
+						class="rounded-full size-12"
+					/>
+					<a href=" " class="text-2xl font-bold text-white">IT Services</a>
+				</div>
+
+				<!-- Desktop Navigation -->
+				<div class="hidden md:flex items-center space-x-6 text-lg">
+					<a href="../user/home.html" class="text-white hover:text-blue-300"
+						>Home</a
+					>
+					<a
+						href="../user/services.html"
+						class="text-xl text-blue-300 hover:text-blue-300"
+						>Services</a
+					>
+					<a href="../user/products.html" class="text-white hover:text-blue-300"
+						>Products</a
+					>
+
+					<div class="relative">
+						<button id="profileToggle" class="text-white hover:text-blue-300">
+							<i class="fas fa-user text-xl"></i>
+						</button>
+						<div
+							id="profileDropdown"
+							class="hidden absolute right-0 mt-2 w-48 bg-[#201e43] text-white border border-gray-700 rounded-lg shadow-lg"
+						>
+							<div class="py-1">
+								<a
+									href="../user/cart.html"
+									class="block px-4 py-2 hover:bg-blue-900"
+								>
+									<i class="fas fa-shopping-cart mr-2"></i>Cart
+								</a>
+								<a
+									href="../user/order.html"
+									class="block px-4 py-2 hover:bg-blue-900"
+								>
+									<i class="fas fa-list mr-2"></i>Orders
+								</a>
+								<!-- <a href="#" class="block px-4 py-2 hover:bg-blue-900">
+							<i class="fas fa-cog mr-2"></i>Settings
+						</a> -->
+								<a
+									href="#"
+									id="logoutBtn"
+									class="block px-4 py-2 hover:bg-blue-900"
+								>
+									<i class="fas fa-sign-out-alt mr-2"></i>Logout
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Mobile Menu Toggle -->
+				<button id="mobileMenuToggle" class="md:hidden text-2xl text-white">
+					<i class="fas fa-bars"></i>
+				</button>
+			</div>
+		</nav>
 
 		<!-- Services Hero Section -->
 		<header class="pt-24 container mx-auto px-6 mb-16">
@@ -158,15 +226,155 @@
 		</div>
 
 		<!-- footer -->
-		<div class="signupbottom-details">
-			<div class="signupbottom_text bg-[#201e43]">
-				<span class="signupcopyright_text"
-					>&#169; <a href="#">IT Services.</a> All rights reserved 2024</span
-				>
-				<span class="signuppolicy_terms">
-					<a href="#">Terms & Conditions</a>
-				</span>
-			</div>
+		<div class="bg-[#201e43]">
+			<footer class="bg-[#201e43] text-white pt-10">
+				<div class="mx-auto max-w-6xl">
+					<div class="flex justify-between gap-8">
+						<div class="md:col-span-1">
+							<h3 class="text-2xl font-bold mb-4">IT Services</h3>
+							<p class="text-sm text-gray-300 mb-4">
+								Stay in the loop and sign up for IT Services
+							</p>
+							<div class="relative">
+								<input
+									type="email"
+									placeholder="Enter your email"
+									class="w-full px-4 py-2 rounded-full bg-white/10 text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-[#508c9b]"
+								/>
+								<button
+									class="absolute right-1 top-1/2 -translate-y-1/2 bg-[#508c9b] text-white px-4 py-2 rounded-full text-sm"
+								>
+									Subscribe
+								</button>
+							</div>
+						</div>
+
+						<div>
+							<h4 class="font-semibold mb-4 pb-2 border-b border-white/20">
+								Company
+							</h4>
+							<ul class="space-y-2">
+								<li>
+									<a
+										href="home.html"
+										class="text-gray-300 hover:text-white transition"
+										>Home</a
+									>
+								</li>
+								<li>
+									<a
+										href="../about-us.html"
+										class="text-gray-300 hover:text-white transition"
+										>About</a
+									>
+								</li>
+								<li>
+									<a
+										href="services.html"
+										class="text-gray-300 hover:text-white transition"
+										>Services</a
+									>
+								</li>
+								<li>
+									<a
+										href="services.html"
+										class="text-gray-300 hover:text-white transition"
+										>Pricing</a
+									>
+								</li>
+								<li>
+									<a
+										href="../about-us.html"
+										class="text-gray-300 hover:text-white transition"
+										>Team</a
+									>
+								</li>
+							</ul>
+						</div>
+
+						<div>
+							<h4 class="font-semibold mb-4 pb-2 border-b border-white/20">
+								Documentation
+							</h4>
+							<ul class="space-y-2">
+								<li>
+									<a href="#" class="text-gray-300 hover:text-white transition"
+										>Help Centre</a
+									>
+								</li>
+								<li>
+									<a
+										href="../contact-us.html"
+										class="text-gray-300 hover:text-white transition"
+										>Contact</a
+									>
+								</li>
+								<li>
+									<a href="#" class="text-gray-300 hover:text-white transition"
+										>FAQ</a
+									>
+								</li>
+								<li>
+									<a href="#" class="text-gray-300 hover:text-white transition"
+										>Privacy Policy</a
+									>
+								</li>
+							</ul>
+						</div>
+
+						<div>
+							<h4 class="font-semibold mb-4 pb-2 border-b border-white/20">
+								Social
+							</h4>
+							<ul class="space-y-2">
+								<li>
+									<a
+										href="https://www.facebook.com/profile.php?id=61568755081153"
+										class="text-gray-300 hover:text-white transition"
+										target="_blank"
+										>Facebook</a
+									>
+								</li>
+								<li>
+									<a
+										href="https://www.instagram.com/itservices_official/"
+										class="text-gray-300 hover:text-white transition"
+										target="_blank"
+										>Instagram</a
+									>
+								</li>
+								<li>
+									<a
+										href="https://www.youtube.com/@ITServices_official/"
+										class="text-gray-300 hover:text-white transition"
+										target="_blank"
+										>Youtube</a
+									>
+								</li>
+								<li>
+									<a
+										href="https://www.linkedin.com/in/itservicesofficial/"
+										class="text-gray-300 hover:text-white transition"
+										target="_blank"
+										>LinkedIn</a
+									>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="signupbottom-details">
+					<div class="signupbottom_text">
+						<span class="signupcopyright_text"
+							>&#169; <a href="#">IT Services.</a> All rights reserved
+							2024</span
+						>
+						<span class="signuppolicy_terms">
+							<a href="#">Terms & Conditions</a>
+						</span>
+					</div>
+				</div>
+			</footer>
 		</div>
 		<script>
 			// new
@@ -203,6 +411,70 @@
 			// Load components when the page is ready
 			document.addEventListener("DOMContentLoaded", loadComponents);
 		</script>
+
+		<script>
+			document
+				.getElementById("profileToggle")
+				.addEventListener("click", function () {
+					const dropdown = document.getElementById("profileDropdown");
+					dropdown.classList.toggle("hidden");
+				});
+
+			// Close dropdown when clicking outside
+			window.addEventListener("click", function (event) {
+				const dropdown = document.getElementById("profileDropdown");
+				if (!event.target.closest("#profileToggle")) {
+					dropdown.classList.add("hidden");
+				}
+			});
+
+			// Mobile Menu Toggle
+			document
+				.getElementById("mobileMenuToggle")
+				.addEventListener("click", function () {
+					const mobileMenu = document.getElementById("mobileMenu");
+					mobileMenu.classList.remove("-translate-x-full");
+				});
+
+			// Close Mobile si
+			document
+				.getElementById("closeMobileMenu")
+				.addEventListener("click", function () {
+					const mobileMenu = document.getElementById("mobileMenu");
+					mobileMenu.classList.add("-translate-x-full");
+				});
+
+			// Close Mobile Menu when menu items clicked
+			document.querySelectorAll("#mobileMenu a").forEach((item) => {
+				item.addEventListener("click", function () {
+					const mobileMenu = document.getElementById("mobileMenu");
+					mobileMenu.classList.add("-translate-x-full");
+				});
+			});
+
+			// Logout Functionality
+			function handleLogout() {
+				alert("You have been logged out!");
+				// Clear user authentication
+				localStorage.removeItem("userId");
+				localStorage.removeItem("userEmail");
+				localStorage.removeItem("userName");
+
+				// Redirect to login page
+				window.location.href = "../auth/sign-in.html";
+			}
+
+			// Desktop Logout
+			document
+				.getElementById("logoutBtn")
+				.addEventListener("click", handleLogout);
+
+			// Mobile Logout
+			document
+				.getElementById("mobilLogoutBtn")
+				.addEventListener("click", handleLogout);
+		</script>
+
 		<script src="./js/services.js"></script>
 		<script src="../script.js"></script>
 	</body>
