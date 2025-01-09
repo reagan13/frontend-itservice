@@ -1,12 +1,7 @@
 // Function to fetch products
 async function fetchProducts() {
 	try {
-		const url =
-			window.location.hostname === "localhost" ||
-			window.location.hostname === "127.0.0.1"
-				? "http://localhost:3000/api/products"
-				: "https://backend-itservice.onrender.com/api/products";
-		const response = await fetch(url);
+		const response = await fetch("http://localhost/user/get-all-products.php");
 
 		if (!response.ok) {
 			throw new Error("Failed to fetch products");
@@ -67,9 +62,12 @@ async function deleteProduct(productId) {
 	}
 
 	try {
-		const response = await fetch(`${url}/api/products/delete/${productId}`, {
-			method: "PUT", // Using soft delete method
-		});
+		const response = await fetch(
+			`http://localhost/admin/soft-delete-product.php?id=${productId}`,
+			{
+				method: "PUT", // Using soft delete method
+			}
+		);
 
 		// Check if response is not ok
 		if (!response.ok) {
@@ -90,11 +88,6 @@ async function deleteProduct(productId) {
 		alert("Failed to delete product");
 	}
 }
-const url =
-	window.location.hostname === "localhost" ||
-	window.location.hostname === "127.0.0.1"
-		? "http://localhost:3000"
-		: "https://backend-itservice.onrender.com";
 
 // Show Add Product Modal
 function showAddProductModal() {
@@ -143,7 +136,7 @@ async function handleAddProduct(event) {
 	if (!validateProductData(productData)) return;
 
 	try {
-		const response = await fetch(`${url}/api/products/add`, {
+		const response = await fetch(`http://localhost/admin/add-product.php`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -192,7 +185,7 @@ async function handleEditProduct(event) {
 
 	try {
 		const response = await fetch(
-			`${url}/api/products/update/${productData.id}`,
+			`http://localhost/admin/update-product.php?id=${productData.id}`,
 			{
 				method: "PUT",
 				headers: {
@@ -254,7 +247,9 @@ function validateProductData(productData) {
 async function openEditModal(productId) {
 	try {
 		// Fetch product details
-		const response = await fetch(`${url}/api/products/${productId}`);
+		const response = await fetch(
+			`http://localhost/admin/get-product.php?id=${productId}`
+		);
 
 		if (!response.ok) {
 			throw new Error("Failed to fetch product details");
@@ -290,12 +285,7 @@ function filterProducts() {
 	const searchTerm = searchInput.value.toLowerCase();
 	const categoryTerm = categoryFilter.value.toLowerCase();
 
-	fetch(
-		window.location.hostname === "localhost" ||
-			window.location.hostname === "127.0.0.1"
-			? "http://localhost:3000/api/products"
-			: "https://backend-itservice.onrender.com/api/products"
-	)
+	fetch("http://localhost/user/get-all-products.php")
 		.then((response) => response.json())
 		.then((products) => {
 			const filteredProducts = products.filter(
@@ -356,13 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Function to fetch and populate categories
 async function populateCategories() {
 	try {
-		const url =
-			window.location.hostname === "localhost" ||
-			window.location.hostname === "127.0.0.1"
-				? "http://localhost:3000/api/products"
-				: "https://backend-itservice.onrender.com/api/products";
-
-		const response = await fetch(url);
+		const response = await fetch("http://localhost/user/get-all-products.php");
 
 		if (!response.ok) {
 			throw new Error("Failed to fetch products");

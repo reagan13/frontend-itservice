@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			});
 
 			const data = await response.json();
-			console.log(data.user);
+
 			if (!response.ok) {
 				throw new Error(data.error || "Sign-in failed");
 			}
@@ -83,9 +83,15 @@ document.addEventListener("DOMContentLoaded", () => {
 				`${data.user.first_name} ${data.user.last_name}`
 			);
 
-			// Successful sign-in
-			alert("Sign-in successful");
-			window.location.href = "../user/home.html";
+			// Check if the user is an admin
+			if (data.user.email === "admin@gmail.com") {
+				// Redirect to the admin products page
+				window.location.href = "../admin/products.html";
+			} else {
+				// Successful sign-in for a regular user
+				alert("Sign-in successful");
+				window.location.href = "../user/home.html";
+			}
 		} catch (error) {
 			console.error("Sign-in error:", error);
 
