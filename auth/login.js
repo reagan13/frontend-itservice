@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			};
 
 			// Send login request
-			const response = await fetch("/auth/sign-in.php", {
+			const response = await fetch("http://localhost/auth/sign-in.php", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

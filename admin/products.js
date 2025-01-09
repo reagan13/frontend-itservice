@@ -1,9 +1,7 @@
 // Function to fetch products
 async function fetchProducts() {
 	try {
-		const response = await fetch(
-			"https://itservicesofficial.x10.mx/user/get-all-products.php"
-		);
+		const response = await fetch("http://localhost/user/get-all-products.php");
 
 		if (!response.ok) {
 			throw new Error("Failed to fetch products");
