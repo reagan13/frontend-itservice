@@ -113,20 +113,23 @@ document.addEventListener("DOMContentLoaded", () => {
 				);
 				return;
 			}
-
-			// Check response status
+			// Check response status and handle specific errors
 			if (!response.ok) {
-				// Throw error with more detailed message
-				throw new Error(
-					data?.error ||
-						data?.message ||
-						`Signup failed with status ${response.status}`
-				);
+				// If email already exists, show specific alert
+				if (data?.error === "Email already in use") {
+					alert(
+						"This email is already registered. Please use a different one."
+					);
+				} else {
+					// Throw general error with more detailed message
+					throw new Error(
+						data?.error ||
+							data?.message ||
+							`Signup failed with status ${response.status}`
+					);
+				}
+				return;
 			}
-
-			// Success handling
-			alert("Signup successful! Redirecting to login...");
-			window.location.href = "./sign-in.html";
 		} catch (error) {
 			// Detailed error logging
 			console.error("Signup error details:", {
