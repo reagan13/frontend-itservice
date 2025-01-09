@@ -1,151 +1,61 @@
-document.addEventListener("DOMContentLoaded", () => {
-	const isLogin = localStorage.getItem("userId");
-	if (isLogin) {
-		alert("You are already logged in. Please Log out to sign up");
-		window.location.href = "../user/home.html";
-	}
+<?php
+// signup.php
+header('Content-Type: application/json');
 
-	const signupForm = document.getElementById("signUpForm");
-	const firstNameInput = signupForm.querySelector('input[name="first_name"]');
-	const lastNameInput = signupForm.querySelector('input[name="last_name"]');
-	const emailInput = signupForm.querySelector('input[name="email"]');
-	const passwordInput = signupForm.querySelector('input[name="password"]');
-	const confirmPasswordInput = signupForm.querySelector(
-		'input[name="confirm_password"]'
-	);
-	const submitButton = signupForm.querySelector('button[type="submit"]');
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-	// Validation Functions
-	function validateEmail(email) {
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		return emailRegex.test(email);
-	}
+require '../db.php'; // Include your database connection file
 
-	function validatePassword(password) {
-		// At least 8 characters, one uppercase, one lowercase, one number
-		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-		return passwordRegex.test(password);
-	}
+// Debugging - Check if $conn is properly set
+if (!$conn) {
+    echo json_encode(['error' => 'Database connection failed']);
+    http_response_code(500); // Internal Server Error
+    exit;
+}
 
-	// Validate Form
-	function validateForm() {
-		let errors = [];
+try {
+    // Extract input
+    $data = json_decode(file_get_contents("php://input"));
+    $first_name = $data->first_name ?? null;
+    $last_name = $data->last_name ?? null;
+    $email = $data->email ?? null;
+    $password = $data->password ?? null;
+    $confirm_password = $data->confirm_password ?? null;
 
-		// Validate First Name
-		if (firstNameInput.value.trim() === "") {
-			errors.push("First name is required");
-		}
+    // Validate input
+    if (!$first_name || !$last_name || !$email || !$password || !$confirm_password) {
+        echo json_encode(['error' => 'All fields are required']);
+        http_response_code(400); // Bad Request
+        exit;
+    }
 
-		// Validate Last Name
-		if (lastNameInput.value.trim() === "") {
-			errors.push("Last name is required");
-		}
+    if ($password !== $confirm_password) {
+        echo json_encode(['error' => 'Passwords do not match']);
+        http_response_code(400); // Bad Request
+        exit;
+    }
 
-		// Validate Email
-		if (!validateEmail(emailInput.value.trim())) {
-			errors.push("Please enter a valid email address");
-		}
+    // Check for existing email
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-		// Validate Password
-		if (!validatePassword(passwordInput.value)) {
-			errors.push(
-				"Password must be at least 8 characters long, contain uppercase, lowercase, and a number"
-			);
-		}
+    if ($result) {
+        echo json_encode(['error' => 'Email already in use']);
+        http_response_code(409); // Conflict
+        exit;
+    }
 
-		// Validate Confirm Password
-		if (passwordInput.value !== confirmPasswordInput.value) {
-			errors.push("Passwords do not match");
-		}
+    // Insert user
+    $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, password_hash) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$first_name, $last_name, $email, $password]); // Store password in plain text
 
-		return errors;
-	}
-
-	async function handleSignup(event) {
-		event.preventDefault();
-
-		// Validate form
-		const validationErrors = validateForm();
-
-		// If there are validation errors, show them
-		if (validationErrors.length > 0) {
-			alert(validationErrors[0]);
-			return;
-		}
-
-		// Disable submit button
-		submitButton.disabled = true;
-		submitButton.textContent = "Signing Up...";
-
-		try {
-			// Prepare form data
-			const formData = {
-				first_name: firstNameInput.value.trim(),
-				last_name: lastNameInput.value.trim(),
-				email: emailInput.value.trim(),
-				password: passwordInput.value,
-				confirm_password: confirmPasswordInput.value,
-			};
-
-			// Send signup request
-			const response = await fetch("https://itservicesofficial.x10.mx/auth/signup.php", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
-			});
-
-			// Log the full response for debugging
-			console.log("Response status:", response.status);
-
-			// Try to parse response body
-			let data;
-			try {
-				data = await response.json();
-				console.log("Response data:", data);
-			} catch (parseError) {
-				console.error("Failed to parse response:", parseError);
-				const responseText = await response.text();
-				console.log("Response text:", responseText);
-				alert(
-					"An error occurred while processing your request. Please try again."
-				);
-				return;
-			}
-
-			// Check response status and handle specific errors
-        if (!response.ok) {
-            // If email already exists, show specific alert
-            if (data?.error === "Email already in use") {
-                alert("This email is already registered. Please use a different one.");
-            } else {
-                // Throw general error with more detailed message
-                throw new Error(data?.error || data?.message || `Signup failed with status ${response.status}`);
-            }
-            return;
-        }
-
-        // Success handling
-        alert("Signup successful! Redirecting to login...");
-        window.location.href = "./sign-in.html";
-		} catch (error) {
-			// Detailed error logging
-			console.error("Signup error details:", {
-				message: error.message,
-				name: error.name,
-				stack: error.stack,
-			});
-
-			// User-friendly error message
-			alert(error.message || "Signup failed! Please try again.");
-		} finally {
-			// Re-enable submit button
-			submitButton.disabled = false;
-			submitButton.textContent = "Submit";
-		}
-	}
-
-	// Add event listener
-	signupForm.addEventListener("submit", handleSignup);
-});
+    echo json_encode(['message' => 'User  successfully created', 'userId' => $conn->lastInsertId()]);
+    http_response_code(201); // Created
+} catch (Exception $e) {
+    echo json_encode(['error' => 'An unexpected error occurred: ' . $e->getMessage()]);
+    http_response_code(500); // Internal Server Error
+}
+?>
