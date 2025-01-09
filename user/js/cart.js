@@ -16,7 +16,7 @@ class CartManager {
 			this.userId = storedUserId;
 
 			const response = await fetch(
-				`http://localhost/user/get-cart.php?userId=${storedUserId}`,
+				`https://itservicesofficial.x10.mx/user/get-cart.php?userId=${storedUserId}`,
 				{
 					method: "GET",
 					headers: {
@@ -266,7 +266,7 @@ class CartManager {
 		if (confirmRemove) {
 			try {
 				const response = await fetch(
-					`http://localhost/user/remove-from-cart.php`,
+					`https://itservicesofficial.x10.mx/user/remove-from-cart.php`,
 					{
 						method: "DELETE",
 						headers: {
@@ -321,7 +321,7 @@ class CartManager {
 			const userId = localStorage.getItem("userId");
 			// Fetch current cart items
 			const cartResponse = await fetch(
-				`http://localhost/user/proceed-to-checkout.php?userId=${userId}`
+				`https://itservicesofficial.x10.mx/user/proceed-to-checkout.php?userId=${userId}`
 			);
 			if (!cartResponse.ok) {
 				throw new Error("Failed to fetch cart items");
@@ -349,7 +349,7 @@ class CartManager {
 
 			// Place order
 			const orderResponse = await fetch(
-				`http://localhost/user/place-order.php`,
+				`https://itservicesofficial.x10.mx/user/place-order.php`,
 				{
 					method: "POST",
 					headers: {
@@ -470,7 +470,7 @@ class CartManager {
 	async updateCartItemQuantity(productId, quantity) {
 		try {
 			const response = await fetch(
-				`http://localhost/user/update-cart-quantity.php`,
+				`https://itservicesofficial.x10.mx/user/update-cart-quantity.php`,
 				{
 					method: "PUT",
 					headers: {

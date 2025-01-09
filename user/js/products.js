@@ -178,12 +178,15 @@ function resetFilters() {
 // Fetch Products from Backend
 async function fetchProducts() {
 	try {
-		const response = await fetch("http://localhost/user/get-all-products.php", {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+		const response = await fetch(
+			"https://itservicesofficial.x10.mx/user/get-all-products.php",
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		);
 
 		if (!response.ok) {
 			const errorBody = await response.text();
@@ -251,17 +254,20 @@ async function addToCart(productId, quantity = 1) {
 	}
 
 	try {
-		const response = await fetch("http://localhost/user/add-to-cart.php", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				user_id: userId,
-				product_id: productId,
-				quantity: quantity,
-			}),
-		});
+		const response = await fetch(
+			"https://itservicesofficial.x10.mx/user/add-to-cart.php",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					user_id: userId,
+					product_id: productId,
+					quantity: quantity,
+				}),
+			}
+		);
 
 		const data = await response.json();
 
@@ -427,13 +433,16 @@ Are you sure you want to purchase this item?
 		};
 
 		// Send order to backend
-		const response = await fetch("http://localhost/user/single-order.php", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(orderData),
-		});
+		const response = await fetch(
+			"https://itservicesofficial.x10.mx/user/single-order.php",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(orderData),
+			}
+		);
 
 		// Check response
 		if (!response.ok) {
@@ -481,7 +490,9 @@ document.addEventListener("DOMContentLoaded", init);
 // Function to fetch and populate categories
 async function populateCategories() {
 	try {
-		const response = await fetch("http://localhost/user/get-all-products.php");
+		const response = await fetch(
+			"https://itservicesofficial.x10.mx/user/get-all-products.php"
+		);
 
 		if (!response.ok) {
 			throw new Error("Failed to fetch products");

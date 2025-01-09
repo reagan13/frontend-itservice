@@ -1,7 +1,9 @@
 // Function to fetch products
 async function fetchProducts() {
 	try {
-		const response = await fetch("http://localhost/user/get-all-products.php");
+		const response = await fetch(
+			"https://itservicesofficial.x10.mx/user/get-all-products.php"
+		);
 
 		if (!response.ok) {
 			throw new Error("Failed to fetch products");
@@ -63,7 +65,7 @@ async function deleteProduct(productId) {
 
 	try {
 		const response = await fetch(
-			`http://localhost/admin/soft-delete-product.php?id=${productId}`,
+			`https://itservicesofficial.x10.mx/admin/soft-delete-product.php?id=${productId}`,
 			{
 				method: "PUT", // Using soft delete method
 			}
@@ -136,13 +138,16 @@ async function handleAddProduct(event) {
 	if (!validateProductData(productData)) return;
 
 	try {
-		const response = await fetch(`http://localhost/admin/add-product.php`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(productData),
-		});
+		const response = await fetch(
+			`https://itservicesofficial.x10.mx/admin/add-product.php`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(productData),
+			}
+		);
 		// Try to get response text for more information
 		const responseText = await response.text();
 		console.log("Response text:", responseText);
@@ -185,7 +190,7 @@ async function handleEditProduct(event) {
 
 	try {
 		const response = await fetch(
-			`http://localhost/admin/update-product.php?id=${productData.id}`,
+			`https://itservicesofficial.x10.mx/admin/update-product.php?id=${productData.id}`,
 			{
 				method: "PUT",
 				headers: {
@@ -248,7 +253,7 @@ async function openEditModal(productId) {
 	try {
 		// Fetch product details
 		const response = await fetch(
-			`http://localhost/admin/get-product.php?id=${productId}`
+			`https://itservicesofficial.x10.mx/admin/get-product.php?id=${productId}`
 		);
 
 		if (!response.ok) {
@@ -285,7 +290,7 @@ function filterProducts() {
 	const searchTerm = searchInput.value.toLowerCase();
 	const categoryTerm = categoryFilter.value.toLowerCase();
 
-	fetch("http://localhost/user/get-all-products.php")
+	fetch("https://itservicesofficial.x10.mx/user/get-all-products.php")
 		.then((response) => response.json())
 		.then((products) => {
 			const filteredProducts = products.filter(
@@ -346,7 +351,9 @@ document.addEventListener("DOMContentLoaded", () => {
 // Function to fetch and populate categories
 async function populateCategories() {
 	try {
-		const response = await fetch("http://localhost/user/get-all-products.php");
+		const response = await fetch(
+			"https://itservicesofficial.x10.mx/user/get-all-products.php"
+		);
 
 		if (!response.ok) {
 			throw new Error("Failed to fetch products");

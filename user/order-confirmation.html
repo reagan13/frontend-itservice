@@ -344,7 +344,7 @@
 				try {
 					const numericOrderId = orderId.replace("ORD-", "");
 					const response = await fetch(
-						`http://localhost/user/get-confirmation.php?orderId=${numericOrderId}&userId=${userId}`,
+						`https://itservicesofficial.x10.mx/user/get-confirmation.php?orderId=${numericOrderId}&userId=${userId}`,
 						{
 							method: "GET",
 							headers: {

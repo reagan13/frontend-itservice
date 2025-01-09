@@ -141,7 +141,7 @@
 					try {
 						// Fetch statistics
 						const statsResponse = await fetch(
-							"http://localhost:3000/api/dashboard/stats"
+							"https://itservicesofficial.x10.mx:3000/api/dashboard/stats"
 						);
 						const statsData = await statsResponse.json();
 
@@ -156,7 +156,7 @@
 
 						// Fetch recent products
 						const productsResponse = await fetch(
-							"http://localhost:3000/api/products?limit=4"
+							"https://itservicesofficial.x10.mx:3000/api/products?limit=4"
 						);
 						const products = await productsResponse.json();
 
