@@ -389,19 +389,16 @@
 						if (!userId) {
 							throw new Error("User not logged in");
 						}
-						const url =
-							window.location.hostname === "localhost" ||
-							window.location.hostname === "127.0.0.1"
-								? "http://localhost:3000"
-								: "https://backend-itservice.onrender.com";
 
-						// Update this line to use full backend URL
-						const response = await fetch(`${url}/api/orders?userId=${userId}`, {
-							method: "GET",
-							headers: {
-								"Content-Type": "application/json",
-							},
-						});
+						const response = await fetch(
+							`http://localhost/user/get-orders.php?userId=${userId}`,
+							{
+								method: "GET",
+								headers: {
+									"Content-Type": "application/json",
+								},
+							}
+						);
 
 						if (!response.ok) {
 							// Log the error response

@@ -343,13 +343,8 @@
 
 				try {
 					const numericOrderId = orderId.replace("ORD-", "");
-					const url =
-						window.location.hostname === "localhost" ||
-						window.location.hostname === "127.0.0.1"
-							? "http://localhost:3000"
-							: "https://backend-itservice.onrender.com/";
 					const response = await fetch(
-						`${url}/api/orders/${numericOrderId}?userId=${userId}`,
+						`http://localhost/user/get-confirmation.php?orderId=${numericOrderId}&userId=${userId}`,
 						{
 							method: "GET",
 							headers: {

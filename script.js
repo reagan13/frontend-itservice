@@ -34,6 +34,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	function logoutUser() {
 		// Clear all authentication-related items from local storage
 		localStorage.removeItem("userId");
+		localStorage.removeItem("userEMail");
+		localStorage.removeItem("userName");
 
 		// Redirect to login page
 		window.location.href = "/auth/sign-in.html";
@@ -59,41 +61,3 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Run authentication check
 	checkAuthentication();
 });
-
-// Improved login process with error handling
-function handleLoginProcess(username, password) {
-	fetch("/api/login", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			username: username,
-			password: password,
-		}),
-	})
-		.then((response) => {
-			if (!response.ok) {
-				throw new Error("Login failed");
-			}
-			return response.json();
-		})
-		.then((data) => {
-			if (data.success) {
-				// Calculate token expiry (e.g., 1 hour from now)
-				const expiryTime = new Date().getTime() + 1 * 60 * 60 * 1000;
-
-				// Call login handler with user details
-				handleLogin(data.userId, data.token, expiryTime);
-			} else {
-				// Handle login failure
-				console.error("Login failed:", data.message);
-				// Optionally show error to user
-				alert(data.message || "Login failed");
-			}
-		})
-		.catch((error) => {
-			console.error("Login error:", error);
-			alert("An error occurred during login");
-		});
-}

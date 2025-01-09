@@ -61,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		return errors;
 	}
 
-	// Handle Form Submission
 	async function handleSignup(event) {
 		event.preventDefault();
 
@@ -88,14 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
 				confirm_password: confirmPasswordInput.value,
 			};
 
-			const url =
-				window.location.hostname === "localhost" ||
-				window.location.hostname === "127.0.0.1"
-					? "http://localhost:3000/api/signup"
-					: "https://backend-itservice.onrender.com/api/signup";
-
 			// Send signup request
-			const response = await fetch(url, {
+			const response = await fetch("/auth/signup.php", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -115,6 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
 				console.error("Failed to parse response:", parseError);
 				const responseText = await response.text();
 				console.log("Response text:", responseText);
+				alert(
+					"An error occurred while processing your request. Please try again."
+				);
+				return;
 			}
 
 			// Check response status
@@ -129,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			// Success handling
 			alert("Signup successful! Redirecting to login...");
-			window.location.href = "sign-in.html";
+			window.location.href = "./sign-in.html";
 		} catch (error) {
 			// Detailed error logging
 			console.error("Signup error details:", {

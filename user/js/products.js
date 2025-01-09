@@ -178,13 +178,7 @@ function resetFilters() {
 // Fetch Products from Backend
 async function fetchProducts() {
 	try {
-		const url =
-			window.location.hostname === "localhost" ||
-			window.location.hostname === "127.0.0.1"
-				? "http://localhost:3000/api/products"
-				: "https://backend-itservice.onrender.com/api/products";
-
-		const response = await fetch(url, {
+		const response = await fetch("http://localhost/user/get-all-products.php", {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -256,13 +250,8 @@ async function addToCart(productId, quantity = 1) {
 		return;
 	}
 
-	const url =
-		window.location.hostname === "localhost" ||
-		window.location.hostname === "127.0.0.1"
-			? "http://localhost:3000/api/cart"
-			: "https://backend-itservice.onrender.com/api/cart";
 	try {
-		const response = await fetch(url, {
+		const response = await fetch("http://localhost/user/add-to-cart.php", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -436,14 +425,9 @@ Are you sure you want to purchase this item?
 			productId: product.id,
 			quantity: 1, // Default to 1, can be modified if you want to support quantity selection
 		};
-		const url =
-			window.location.hostname === "localhost" ||
-			window.location.hostname === "127.0.0.1"
-				? "http://localhost:3000/api/single-order"
-				: "https://backend-itservice.onrender.com/api/single-order";
 
 		// Send order to backend
-		const response = await fetch(url, {
+		const response = await fetch("http://localhost/user/single-order.php", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -497,13 +481,7 @@ document.addEventListener("DOMContentLoaded", init);
 // Function to fetch and populate categories
 async function populateCategories() {
 	try {
-		const url =
-			window.location.hostname === "localhost" ||
-			window.location.hostname === "127.0.0.1"
-				? "http://localhost:3000/api/products"
-				: "https://backend-itservice.onrender.com/api/products";
-
-		const response = await fetch(url);
+		const response = await fetch("http://localhost/user/get-all-products.php");
 
 		if (!response.ok) {
 			throw new Error("Failed to fetch products");

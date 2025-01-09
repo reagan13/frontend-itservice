@@ -14,18 +14,16 @@ class CartManager {
 			}
 
 			this.userId = storedUserId;
-			const url =
-				window.location.hostname === "localhost" ||
-				window.location.hostname === "127.0.0.1"
-					? "http://localhost:3000/api"
-					: "https://backend-itservice.onrender.com/api";
 
-			const response = await fetch(`${url}/cart/${this.userId}`, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
+			const response = await fetch(
+				`http://localhost/user/get-cart.php?userId=${storedUserId}`,
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
 
 			if (!response.ok) {
 				const errorBody = await response.text();
@@ -259,54 +257,27 @@ class CartManager {
 		}
 	}
 
-	async updateCartItemQuantity(productId, quantity) {
-		try {
-			const response = await fetch(
-				`${this.apiBaseUrl}/cart/${this.userId}/update`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({ productId, quantity }),
-				}
-			);
-
-			if (!response.ok) {
-				const errorBody = await response.text();
-				console.error("Error updating cart item:", errorBody);
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-
-			this.renderCart();
-		} catch (error) {
-			console.error("Error updating cart item quantity:", error);
-		}
-	}
-
 	async removeCartItem(productId) {
 		// Use native confirm dialog
 		const confirmRemove = confirm(
 			"Remove Item\n\nAre you sure you want to remove this item from your cart?"
 		);
-		const url =
-			window.location.hostname === "localhost" ||
-			window.location.hostname === "127.0.0.1"
-				? "http://localhost:3000/api"
-				: "https://backend-itservice.onrender.com/api";
 
 		if (confirmRemove) {
 			try {
-				const response = await fetch(`${url}/cart/remove`, {
-					method: "DELETE",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						userId: this.userId,
-						productId,
-					}),
-				});
+				const response = await fetch(
+					`http://localhost/user/remove-from-cart.php`,
+					{
+						method: "DELETE",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
+							userId: this.userId,
+							productId,
+						}),
+					}
+				);
 
 				if (!response.ok) {
 					throw new Error("Failed to remove item from cart");
@@ -347,19 +318,16 @@ class CartManager {
 
 	async proceedToCheckout() {
 		try {
-			const url =
-				window.location.hostname === "localhost" ||
-				window.location.hostname === "127.0.0.1"
-					? "http://localhost:3000/api"
-					: "https://backend-itservice.onrender.com/api";
-
+			const userId = localStorage.getItem("userId");
 			// Fetch current cart items
-			const cartResponse = await fetch(`${url}/cart/${this.userId}`);
+			const cartResponse = await fetch(
+				`http://localhost/user/proceed-to-checkout.php?userId=${userId}`
+			);
 			if (!cartResponse.ok) {
 				throw new Error("Failed to fetch cart items");
 			}
 			const cartData = await cartResponse.json();
-
+			console.log(cartData);
 			// Validate cart
 			if (cartData.cartItems.length === 0) {
 				alert("Your cart is empty");
@@ -369,7 +337,7 @@ class CartManager {
 
 			// Prepare order data
 			const orderData = {
-				userId: this.userId,
+				userId: userId,
 				items: cartData.cartItems.map((item) => ({
 					id: item.product_id,
 					name: item.name,
@@ -380,13 +348,18 @@ class CartManager {
 			};
 
 			// Place order
-			const orderResponse = await fetch(`${url}/orders/place`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(orderData),
-			});
+			const orderResponse = await fetch(
+				`http://localhost/user/place-order.php`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(orderData),
+				}
+			);
+
+			console.log("Order response:", orderResponse);
 
 			if (!orderResponse.ok) {
 				const errorData = await orderResponse.json();
@@ -394,8 +367,10 @@ class CartManager {
 				throw new Error(errorData.error || "Order placement failed");
 			}
 
+			console.log("asdsa");
 			const orderResult = await orderResponse.json();
 
+			console.log("1");
 			alert("Order placed successfully!");
 			// Show success message and redirect
 			// this.showSuccessMessage("Order placed successfully!");
@@ -494,22 +469,20 @@ class CartManager {
 	}
 	async updateCartItemQuantity(productId, quantity) {
 		try {
-			const url =
-				window.location.hostname === "localhost" ||
-				window.location.hostname === "127.0.0.1"
-					? "http://localhost:3000/api"
-					: "https://backend-itservice.onrender.com/api";
-			const response = await fetch(`${url}/cart/update-quantity`, {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					userId: this.userId,
-					productId,
-					quantity: parseInt(quantity, 10),
-				}),
-			});
+			const response = await fetch(
+				`http://localhost/user/update-cart-quantity.php`,
+				{
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						userId: this.userId,
+						productId,
+						quantity: parseInt(quantity, 10),
+					}),
+				}
+			);
 
 			if (!response.ok) {
 				const errorData = await response.json();

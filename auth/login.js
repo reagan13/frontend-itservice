@@ -59,14 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
 				email: emailInput.value.trim(),
 				password: passwordInput.value,
 			};
-			const url =
-				window.location.hostname === "localhost" ||
-				window.location.hostname === "127.0.0.1"
-					? "http://localhost:3000/api/signin"
-					: "https://backend-itservice.onrender.com/api/signin";
 
 			// Send login request
-			const response = await fetch(url, {
+			const response = await fetch("/auth/sign-in.php", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -75,18 +70,18 @@ document.addEventListener("DOMContentLoaded", () => {
 			});
 
 			const data = await response.json();
-
+			console.log(data.user);
 			if (!response.ok) {
 				throw new Error(data.error || "Sign-in failed");
 			}
 
-			// Store user information in localStorage
-			localStorage.setItem("userId", data.userId);
-			localStorage.setItem("userEmail", data.email);
-			localStorage.setItem("userName", `${data.firstName} ${data.lastName}`);
-
-			// Optional: Store additional user details if needed
-			localStorage.setItem("userRole", data.role);
+			//Store user information in localStorage
+			localStorage.setItem("userId", data.user.id);
+			localStorage.setItem("userEmail", data.user.email);
+			localStorage.setItem(
+				"userName",
+				`${data.user.first_name} ${data.user.last_name}`
+			);
 
 			// Successful sign-in
 			alert("Sign-in successful");
